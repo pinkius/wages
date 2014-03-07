@@ -1,14 +1,8 @@
 package com.webstersmalley.wages.web;
 
-import com.webstersmalley.wages.domain.TimeSheetEntryType;
 import com.webstersmalley.wages.service.TimeSheetEntryService;
-import com.webstersmalley.wages.service.TimeSheetEntryTypeService;
 import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,8 +15,6 @@ import javax.annotation.Resource;
  */
 @Controller
 public class TimeSheetController {
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
     @Resource
     private TimeSheetEntryService timeSheetEntryService;
 
