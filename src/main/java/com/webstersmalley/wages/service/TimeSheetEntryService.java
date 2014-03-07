@@ -42,7 +42,7 @@ public class TimeSheetEntryService {
             rangeStart = start;
         }
         if (end == null) {
-            rangeEnd = start.plusDays(7);
+            rangeEnd = rangeStart.plusDays(7);
         } else {
             rangeEnd = end;
         }
