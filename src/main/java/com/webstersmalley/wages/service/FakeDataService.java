@@ -24,22 +24,22 @@ public class FakeDataService {
     @Resource
     private TimeSheetEntryService timeSheetEntryService;
 
-    private final static String[] firstNames = { "Madeleine", "Amelia", "Oscar" };
-    private final static String[] lastNames = { "Turnbull", "Gray", "Barlow" };
-    private final static String[] taxCodes = { "117L", "028L", "123L" };
-    private final static String[] rateNames = {"Standard Day Rate", "Standard Night Rate", "Special Day Rate", "Overtime", "Weekend", "Holiday" };
-    private final static String[] rates = { "100.00", "75.00", "10.00", "210.00" };
+    private final static String[] FIRST_NAMES = { "Madeleine", "Amelia", "Oscar" };
+    private final static String[] LAST_NAMES = { "Turnbull", "Gray", "Barlow" };
+    private final static String[] TAX_CODES = { "117L", "028L", "123L" };
+    private final static String[] RATE_NAMES = {"Standard Day Rate", "Standard Night Rate", "Special Day Rate", "Overtime", "Weekend", "Holiday" };
+    private final static String[] RATES = { "100.00", "75.00", "10.00", "210.00" };
 
     private String getRandomString(String[] selection) {
         return selection[(int)(Math.random()*selection.length)];
     }
 
     private Employee createEmployee() {
-        return employeeService.save(new Employee(getRandomString(firstNames), getRandomString(lastNames), getRandomString(taxCodes)));
+        return employeeService.save(new Employee(getRandomString(FIRST_NAMES), getRandomString(LAST_NAMES), getRandomString(TAX_CODES)));
     }
 
     private TimeSheetEntryType createTimeSheetEntryType() {
-        return timeSheetEntryTypeService.save(new TimeSheetEntryType(getRandomString(rateNames), new BigDecimal(getRandomString(rates))));
+        return timeSheetEntryTypeService.save(new TimeSheetEntryType(getRandomString(RATE_NAMES), new BigDecimal(getRandomString(RATES))));
     }
 
     public void addFakeData() {
@@ -52,7 +52,7 @@ public class FakeDataService {
 
         TimeSheetEntryType standard = createTimeSheetEntryType();
         Employee employee1 = createEmployee();
-        TimeSheetEntry timeSheetEntry = timeSheetEntryService.save(new TimeSheetEntry(standard, new DateTime().withTimeAtStartOfDay(), new BigDecimal(7.5), employee1));
+        TimeSheetEntry timeSheetEntry = timeSheetEntryService.save(new TimeSheetEntry(standard, new DateTime().withTimeAtStartOfDay(), new BigDecimal("7.50"), employee1));
 
         return employee1;
     }
