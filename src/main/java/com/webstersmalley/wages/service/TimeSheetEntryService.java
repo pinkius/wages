@@ -1,10 +1,8 @@
 package com.webstersmalley.wages.service;
 
 import com.webstersmalley.wages.domain.TimeSheetEntry;
-import com.webstersmalley.wages.domain.TimeSheetEntryType;
 import com.webstersmalley.wages.repository.EmployeeRepository;
 import com.webstersmalley.wages.repository.TimeSheetEntryRepository;
-import com.webstersmalley.wages.repository.TimeSheetEntryTypeRepository;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
@@ -32,16 +30,22 @@ public class TimeSheetEntryService {
     }
 
     public List<TimeSheetEntry> findByEmployeeAndDateBetween(Long employeeId, DateTime start, DateTime end) {
+        DateTime rangeStart;
+        DateTime rangeEnd;
         if (start == null) {
             if (end == null) {
-                start = new DateTime().withDayOfWeek(1);
+                rangeStart = new DateTime().withDayOfWeek(1);
             } else {
-                start = end.minusDays(7);
+                rangeStart = end.minusDays(7);
             }
+        } else {
+            rangeStart = start;
         }
         if (end == null) {
-            end = start.plusDays(7);
+            rangeEnd = start.plusDays(7);
+        } else {
+            rangeEnd = end;
         }
-        return timeSheetEntryRepository.findByEmployeeAndDateBetween(employeeRepository.findById(employeeId), start, end);
+        return timeSheetEntryRepository.findByEmployeeAndDateBetween(employeeRepository.findById(employeeId), rangeStart, rangeEnd);
     }
 }
