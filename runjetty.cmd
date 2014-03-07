@@ -1,0 +1,1 @@
+call mvn jetty:run -Djetty.port=9090 -Denvironment=dev

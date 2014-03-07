@@ -1,0 +1,71 @@
+html,
+	body {
+		margin:0;
+		padding:0;
+		height:100%;
+	color: black;
+	font-family: Arial;
+}
+
+
+.legal {
+	font-size: 8pt;
+	font-family: Arial;
+}
+
+.error {
+	color: red;
+}
+
+	#header {
+		padding:10px;
+			font-size: 16pt;
+        	font-family: Arial;
+        	color: Navy;
+	}
+ 	#container {
+ 		min-height:100%;
+ 		position:relative;
+ 	}
+#body {
+   padding:10px;
+   padding-bottom:60px;   /* Height of the footer */
+}
+
+#footer {
+		position:absolute;
+		bottom:0;
+		width:100%;
+		height:60px;			/* Height of the footer */
+}
+
+.programTitle {
+    font-weight: bold;
+    font-size=10pt;
+    color: black;
+}
+
+.programSubTitle {
+    font-size: 8pt;
+    font-weight: bold;
+    color: navy;
+}
+
+.programDescription {
+    font-size: 8pt;
+    color: gray;
+}
+
+.programTime {
+    font-size: 10pt;
+}
+
+.standardTable {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 12px;
+    background: #fff;
+    margin: 45px;
+    width: 700px;
+    border-collapse: collapse;
+    text-align: left;
+}
