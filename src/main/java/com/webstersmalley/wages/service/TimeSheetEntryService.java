@@ -1,12 +1,15 @@
 package com.webstersmalley.wages.service;
 
 import com.webstersmalley.wages.domain.TimeSheetEntry;
+import com.webstersmalley.wages.domain.TimeSheetRow;
 import com.webstersmalley.wages.repository.EmployeeRepository;
 import com.webstersmalley.wages.repository.TimeSheetEntryRepository;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,23 +32,42 @@ public class TimeSheetEntryService {
         return timeSheetEntryRepository.save(timeSheetEntry);
     }
 
-    public List<TimeSheetEntry> findByEmployeeAndDateBetween(Long employeeId, DateTime start, DateTime end) {
-        DateTime rangeStart;
-        DateTime rangeEnd;
+    public List<TimeSheetRow> getTimeSheetByEmployeeAndDateRange(Long employeeId, DateTime start, DateTime end) {
+        List<TimeSheetRow> timeSheetRows = new ArrayList<TimeSheetRow>();
+
+        DateTime currentStart;
+        DateTime realEnd;
         if (start == null) {
             if (end == null) {
-                rangeStart = new DateTime().withDayOfWeek(1);
+                currentStart = new DateTime().withDayOfWeek(DateTimeConstants.MONDAY);
             } else {
-                rangeStart = end.minusDays(7);
+                currentStart = end.minusDays(7).withDayOfWeek(DateTimeConstants.MONDAY);
             }
         } else {
-            rangeStart = start;
+            currentStart = start.withDayOfWeek(DateTimeConstants.MONDAY);
         }
         if (end == null) {
-            rangeEnd = rangeStart.plusDays(7);
+            realEnd = currentStart.withDayOfWeek(DateTimeConstants.SUNDAY);
         } else {
-            rangeEnd = end;
+            realEnd = end.withDayOfWeek(DateTimeConstants.SUNDAY);
         }
-        return timeSheetEntryRepository.findByEmployeeAndDateBetween(employeeRepository.findById(employeeId), rangeStart, rangeEnd);
+
+        while (currentStart.isBefore(realEnd)) {
+            DateTime currentEnd = currentStart.withDayOfWeek(DateTimeConstants.SUNDAY);
+            List<TimeSheetEntry> list = timeSheetEntryRepository.findByEmployeeAndDateBetween(employeeRepository.findById(employeeId), currentStart, currentEnd);
+            if (list.size() > 0) {
+                TimeSheetRow row = new TimeSheetRow();
+                row.setEmployeeId(employeeId);
+                row.setWeekCommencing(currentStart);
+                TimeSheetEntry[] entries = new TimeSheetEntry[7];
+                row.setEntries(entries);
+                for (TimeSheetEntry entry : list) {
+                    entries[entry.getDate().getDayOfWeek()] = entry;
+                }
+                timeSheetRows.add(row);
+            }
+            currentStart = currentStart.plusDays(7);
+        }
+        return timeSheetRows;
     }
 }

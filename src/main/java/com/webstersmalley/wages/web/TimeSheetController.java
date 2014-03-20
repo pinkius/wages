@@ -21,7 +21,7 @@ public class TimeSheetController {
     @RequestMapping(value = "/timeSheet")
     public ModelAndView timeSheet(@RequestParam Long employeeId, @RequestParam(required = false) DateTime start, @RequestParam(required = false) DateTime end) {
         ModelAndView mav = new ModelAndView("timeSheet");
-        mav.addObject("timeSheetEntryTypes", timeSheetEntryService.findByEmployeeAndDateBetween(employeeId, start, end));
+        mav.addObject("timeSheetRows", timeSheetEntryService.getTimeSheetByEmployeeAndDateRange(employeeId, start, end));
         return mav;
     }
 
