@@ -24,6 +24,8 @@ public class TimeSheetEntryService {
     @Resource
     private EmployeeRepository employeeRepository;
 
+    private final static int DAYS_IN_WEEK = 7;
+
     public List<TimeSheetEntry> findAll() {
         return timeSheetEntryRepository.findAll();
     }
@@ -41,7 +43,7 @@ public class TimeSheetEntryService {
             if (end == null) {
                 currentStart = new DateTime().withDayOfWeek(DateTimeConstants.MONDAY);
             } else {
-                currentStart = end.minusDays(7).withDayOfWeek(DateTimeConstants.MONDAY);
+                currentStart = end.minusWeeks(1).withDayOfWeek(DateTimeConstants.MONDAY);
             }
         } else {
             currentStart = start.withDayOfWeek(DateTimeConstants.MONDAY);
@@ -59,14 +61,14 @@ public class TimeSheetEntryService {
                 TimeSheetRow row = new TimeSheetRow();
                 row.setEmployeeId(employeeId);
                 row.setWeekCommencing(currentStart);
-                TimeSheetEntry[] entries = new TimeSheetEntry[7];
+                TimeSheetEntry[] entries = new TimeSheetEntry[DAYS_IN_WEEK];
                 row.setEntries(entries);
                 for (TimeSheetEntry entry : list) {
                     entries[entry.getDate().getDayOfWeek()] = entry;
                 }
                 timeSheetRows.add(row);
             }
-            currentStart = currentStart.plusDays(7);
+            currentStart = currentStart.plusWeeks(1);
         }
         return timeSheetRows;
     }

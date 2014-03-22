@@ -52,7 +52,7 @@ public class FakeDataService {
 
         TimeSheetEntryType standard = createTimeSheetEntryType();
         Employee employee1 = createEmployee();
-        TimeSheetEntry timeSheetEntry = timeSheetEntryService.save(new TimeSheetEntry(standard, new DateTime().withTimeAtStartOfDay(), new BigDecimal("7.50"), employee1));
+        timeSheetEntryService.save(new TimeSheetEntry(standard, new DateTime().withTimeAtStartOfDay(), new BigDecimal("7.50"), employee1));
 
         return employee1;
     }
