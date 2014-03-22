@@ -30,6 +30,8 @@ public class FakeDataService {
     private static final String[] RATE_NAMES = {"Standard Day Rate", "Standard Night Rate", "Special Day Rate", "Overtime", "Weekend", "Holiday" };
     private static final String[] RATES = { "100.00", "75.00", "10.00", "210.00" };
 
+    private boolean dataAdded = false;
+
     private String getRandomString(String[] selection) {
         return selection[(int)(Math.random()*selection.length)];
     }
@@ -46,6 +48,7 @@ public class FakeDataService {
         createEmployee();
         createEmployee();
         createEmployeeAndTimeSheets();
+        dataAdded = true;
     }
 
     public Employee createEmployeeAndTimeSheets() {
@@ -55,5 +58,11 @@ public class FakeDataService {
         timeSheetEntryService.save(new TimeSheetEntry(standard, new DateTime().withTimeAtStartOfDay(), new BigDecimal("7.50"), employee1));
 
         return employee1;
+    }
+
+    public void addFakeDataOnce() {
+        if (!dataAdded) {
+            addFakeData();
+        }
     }
 }

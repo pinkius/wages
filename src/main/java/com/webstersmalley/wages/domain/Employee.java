@@ -1,5 +1,8 @@
 package com.webstersmalley.wages.domain;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -58,5 +61,27 @@ public class Employee {
         this.firstNames = firstNames;
         this.lastName = lastName;
         this.taxCode = taxCode;
+    }
+
+    public boolean equals(Object obj) {
+        if (obj == null) { return false; }
+        if (obj == this) { return true; }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        Employee rhs = (Employee) obj;
+        return new EqualsBuilder()
+                .append(firstNames, rhs.firstNames)
+                .append(lastName, rhs.lastName)
+                .append(taxCode, rhs.taxCode)
+                .isEquals();
+    }
+
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).
+                append(firstNames).
+                append(lastName).
+                append(taxCode).
+                toHashCode();
     }
 }

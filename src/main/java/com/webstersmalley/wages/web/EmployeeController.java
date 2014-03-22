@@ -42,14 +42,6 @@ public class EmployeeController {
         return mav;
     }
 
-    @RequestMapping(value = "/addEmployee")
-    public ModelAndView addEmployee() {
-        ModelAndView mav = new ModelAndView("employeeDetail");
-        Employee employee = new Employee();
-        mav.addObject("employee", employee);
-        return mav;
-    }
-
     @RequestMapping(value = "/saveEmployee")
     public String saveEmployee(@ModelAttribute("command")Employee employee,
                                BindingResult result){
