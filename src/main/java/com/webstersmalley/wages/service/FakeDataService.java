@@ -24,11 +24,11 @@ public class FakeDataService {
     @Resource
     private TimeSheetEntryService timeSheetEntryService;
 
-    private final static String[] FIRST_NAMES = { "Madeleine", "Amelia", "Oscar" };
-    private final static String[] LAST_NAMES = { "Turnbull", "Gray", "Barlow" };
-    private final static String[] TAX_CODES = { "117L", "028L", "123L" };
-    private final static String[] RATE_NAMES = {"Standard Day Rate", "Standard Night Rate", "Special Day Rate", "Overtime", "Weekend", "Holiday" };
-    private final static String[] RATES = { "100.00", "75.00", "10.00", "210.00" };
+    private static final String[] FIRST_NAMES = { "Madeleine", "Amelia", "Oscar" };
+    private static final String[] LAST_NAMES = { "Turnbull", "Gray", "Barlow" };
+    private static final String[] TAX_CODES = { "117L", "028L", "123L" };
+    private static final String[] RATE_NAMES = {"Standard Day Rate", "Standard Night Rate", "Special Day Rate", "Overtime", "Weekend", "Holiday" };
+    private static final String[] RATES = { "100.00", "75.00", "10.00", "210.00" };
 
     private String getRandomString(String[] selection) {
         return selection[(int)(Math.random()*selection.length)];

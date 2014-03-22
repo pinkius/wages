@@ -24,6 +24,7 @@
 
 <table class="table table-hover table-striped">
     <tr>
+        <td>Employee id</td>
         <td>Date</td>
         <td>Monday</td>
         <td>Tuesday</td>
@@ -34,17 +35,16 @@
         <td>Sunday</td>
         <td>Total</td>
     </tr>
+<c:forEach items="${timeSheetRows}" var="row">
     <tr>
-        <td>2nd March 2014</td>
-        <td>100</td>
-        <td>300</td>
-        <td>123</td>
-        <td>123</td>
-        <td>123</td>
-        <td>0</td>
-        <td>0</td>
+        <td>${row.employeeId}</td>
+        <td>${row.weekCommencing}</td>
+    <c:forEach var="i" begin="0" end="6">
+        <td>${row.entries[i].hours}</td>
+    </c:forEach>
         <td>1239 hours / &pound;100.50</td>
     </tr>
+</c:forEach>
 </table>
      </div> <!-- /container -->
 
