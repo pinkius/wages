@@ -8,6 +8,7 @@ import com.webstersmalley.wages.service.TimeSheetEntryService;
 import com.webstersmalley.wages.service.TimeSheetEntryTypeService;
 import com.webstersmalley.wages.web.EmployeeController;
 import com.webstersmalley.wages.web.MainController;
+import com.webstersmalley.wages.web.TimeSheetController;
 import com.webstersmalley.wages.web.TimeSheetEntryTypesController;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -53,6 +54,9 @@ public class AbstractSpringAwareBase extends AbstractJUnit4SpringContextTests {
 
     @Resource
     protected EmployeeController employeeController;
+
+    @Resource
+    protected TimeSheetController timeSheetController;
 
     @Resource
     protected TimeSheetEntryTypesController timeSheetEntryTypesController;
