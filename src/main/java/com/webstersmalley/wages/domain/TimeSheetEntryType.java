@@ -1,5 +1,9 @@
 package com.webstersmalley.wages.domain;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,7 +17,7 @@ import java.math.BigDecimal;
 @Entity
 public class TimeSheetEntryType {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
@@ -51,6 +55,32 @@ public class TimeSheetEntryType {
     public TimeSheetEntryType(String name, BigDecimal hourlyRate) {
         this.name = name;
         this.hourlyRate = hourlyRate;
+    }
+
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this).toString();
+    }
+
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        TimeSheetEntryType rhs = (TimeSheetEntryType) obj;
+        return new EqualsBuilder()
+                .append(name, rhs.name)
+                .isEquals();
+    }
+
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).
+                append(name).
+                toHashCode();
     }
 
 }

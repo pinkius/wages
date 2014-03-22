@@ -1,12 +1,14 @@
 package com.webstersmalley.wages;
 
 import com.webstersmalley.wages.repository.EmployeeRepository;
+import com.webstersmalley.wages.repository.TimeSheetEntryTypeRepository;
 import com.webstersmalley.wages.service.EmployeeService;
 import com.webstersmalley.wages.service.FakeDataService;
 import com.webstersmalley.wages.service.TimeSheetEntryService;
 import com.webstersmalley.wages.service.TimeSheetEntryTypeService;
 import com.webstersmalley.wages.web.EmployeeController;
 import com.webstersmalley.wages.web.MainController;
+import com.webstersmalley.wages.web.TimeSheetEntryTypesController;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.springframework.test.context.ContextConfiguration;
@@ -32,6 +34,9 @@ public class AbstractSpringAwareBase extends AbstractJUnit4SpringContextTests {
     protected EmployeeRepository employeeRepository;
 
     @Resource
+    protected TimeSheetEntryTypeRepository timeSheetEntryTypeRepository;
+
+    @Resource
     protected EmployeeService employeeService;
 
     @Resource
@@ -48,6 +53,9 @@ public class AbstractSpringAwareBase extends AbstractJUnit4SpringContextTests {
 
     @Resource
     protected EmployeeController employeeController;
+
+    @Resource
+    protected TimeSheetEntryTypesController timeSheetEntryTypesController;
 
     @BeforeClass
     public static void setup() {
