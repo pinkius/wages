@@ -17,18 +17,20 @@
 package com.webstersmalley.wages.web;
 
 import com.webstersmalley.wages.domain.WeekTimeSheet;
+import com.webstersmalley.wages.service.EmployeeService;
 import com.webstersmalley.wages.service.WeekTimeSheetService;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 
 /**
  * Created by: Matthew Smalley
@@ -36,9 +38,13 @@ import javax.annotation.Resource;
  */
 @Controller
 public class WeekTimeSheetController {
+    private DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy");
     private Logger logger = LoggerFactory.getLogger(getClass());
     @Resource
     private WeekTimeSheetService weekTimeSheetService;
+
+    @Resource
+    private EmployeeService employeeService;
 
     @RequestMapping(value = "/timeSheet")
     public ModelAndView timeSheet(@RequestParam Long employeeId, @RequestParam(required = false) DateTime start, @RequestParam(required = false) DateTime end) {
@@ -48,10 +54,21 @@ public class WeekTimeSheetController {
     }
 
     @RequestMapping(value = "/saveTimeSheet")
-    public String saveTimeSheet(@ModelAttribute("command") WeekTimeSheet weekTimeSheet, BindingResult resultLong) {
-        logger.info("Found this: {}", weekTimeSheet);
+    public String saveTimeSheet(@RequestParam Long weekTimeSheetId, @RequestParam Long employeeId, @RequestParam String weekCommencing, @RequestParam BigDecimal mondayHours, @RequestParam BigDecimal tuesdayHours, @RequestParam BigDecimal wednesdayHours, @RequestParam BigDecimal thursdayHours, @RequestParam BigDecimal fridayHours, @RequestParam BigDecimal saturdayHours, @RequestParam BigDecimal sundayHours) {
+        WeekTimeSheet week = new WeekTimeSheet();
+        week.setId(weekTimeSheetId);
+        week.setEmployee(employeeService.findById(employeeId));
+        week.setWeekCommencing(formatter.parseDateTime(weekCommencing));
+        week.setMondayHours(mondayHours);
+        week.setTuesdayHours(tuesdayHours);
+        week.setWednesdayHours(wednesdayHours);
+        week.setThursdayHours(thursdayHours);
+        week.setFridayHours(fridayHours);
+        week.setSaturdayHours(saturdayHours);
+        week.setSundayHours(sundayHours);
+        logger.info("Found this: {}", week);
 
-        weekTimeSheetService.saveTimeSheet(weekTimeSheet);
-        return "redirect:timeSheet.html?employeeId=" + weekTimeSheet.getEmployee().getId();
+        weekTimeSheetService.saveTimeSheet(week);
+        return "redirect:timeSheet.html?employeeId=" + week.getEmployee().getId();
     }
 }

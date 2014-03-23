@@ -64,7 +64,7 @@ public class WeekTimeSheetService {
         DateTime realEnd;
         if (start == null) {
             if (end == null) {
-                currentStart = new DateTime().withDayOfWeek(DateTimeConstants.MONDAY);
+                currentStart = new DateTime().withDayOfWeek(DateTimeConstants.MONDAY).minusWeeks(10);
             } else {
                 currentStart = end.minusWeeks(1).withDayOfWeek(DateTimeConstants.MONDAY);
             }
@@ -72,7 +72,7 @@ public class WeekTimeSheetService {
             currentStart = start.withDayOfWeek(DateTimeConstants.MONDAY);
         }
         if (end == null) {
-            realEnd = currentStart.withDayOfWeek(DateTimeConstants.SUNDAY);
+            realEnd = currentStart.withDayOfWeek(DateTimeConstants.SUNDAY).plusWeeks(10);
         } else {
             realEnd = end.withDayOfWeek(DateTimeConstants.SUNDAY);
         }
