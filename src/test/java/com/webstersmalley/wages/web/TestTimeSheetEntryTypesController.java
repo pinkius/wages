@@ -37,6 +37,20 @@ public class TestTimeSheetEntryTypesController extends AbstractSpringAwareBase {
 
     @Test
     public void testDeleteTimeSheetEntryType() throws Exception {
-
+        TimeSheetEntryType type = new TimeSheetEntryType();
+        type.setName(getRandomString(15));
+        type.setHourlyRate(new BigDecimal("10.5"));
+        assertEquals("redirect:timeSheetEntryTypes.html", timeSheetEntryTypesController.saveTimeSheetEntryType(type, null));
+        List<TimeSheetEntryType> types = timeSheetEntryTypeRepository.findAll();
+        assertTrue(types.contains(type));
+        for (TimeSheetEntryType listedType : types) {
+            if (listedType.equals(type)) {
+                type = listedType;
+                break;
+            }
+        }
+        timeSheetEntryTypesController.deleteTimeSheetEntryType(type.getId());
+        types = timeSheetEntryTypeRepository.findAll();
+        assertFalse(types.contains(type));
     }
 }
