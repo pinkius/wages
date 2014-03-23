@@ -35,7 +35,7 @@ public class TimeSheetEntryService {
     }
 
     public List<TimeSheetRow> getTimeSheetByEmployeeAndDateRange(Long employeeId, DateTime start, DateTime end) {
-        List<TimeSheetRow> timeSheetRows = new ArrayList<TimeSheetRow>();
+        List<TimeSheetRow> timeSheetRows = new ArrayList<>();
 
         DateTime currentStart;
         DateTime realEnd;
@@ -64,7 +64,7 @@ public class TimeSheetEntryService {
                 TimeSheetEntry[] entries = new TimeSheetEntry[DAYS_IN_WEEK];
                 row.setEntries(entries);
                 for (TimeSheetEntry entry : list) {
-                    entries[entry.getDate().getDayOfWeek()] = entry;
+                    entries[entry.getDate().getDayOfWeek() - 1] = entry;
                 }
                 timeSheetRows.add(row);
             }

@@ -17,17 +17,7 @@ public class EmployeeService {
     private EmployeeRepository employeeRepository;
 
     public List<Employee> getAllEmployees() {
-        if (employeeRepository.findAll().size() == 0) {
-            addTestData();
-        }
         return employeeRepository.findAll();
-    }
-
-    private void addTestData() {
-        Employee employee = new Employee();
-        employee.setFirstNames("Joe");
-        employee.setLastName("Bloggsie");
-        save(employee);
     }
 
     public Employee save(Employee employee) {
