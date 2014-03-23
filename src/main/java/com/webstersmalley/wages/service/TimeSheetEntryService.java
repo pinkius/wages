@@ -16,15 +16,19 @@
 
 package com.webstersmalley.wages.service;
 
+import com.webstersmalley.wages.domain.Employee;
 import com.webstersmalley.wages.domain.TimeSheetEntry;
 import com.webstersmalley.wages.domain.TimeSheetRow;
 import com.webstersmalley.wages.repository.EmployeeRepository;
 import com.webstersmalley.wages.repository.TimeSheetEntryRepository;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +43,8 @@ public class TimeSheetEntryService {
 
     @Resource
     private EmployeeRepository employeeRepository;
+
+    private DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/mm/yyyy");
 
     private final static int DAYS_IN_WEEK = 7;
 
@@ -87,5 +93,21 @@ public class TimeSheetEntryService {
             currentStart = currentStart.plusWeeks(1);
         }
         return timeSheetRows;
+    }
+
+
+    public void saveTimeSheet(Long employeeId, String weekCommencingString, BigDecimal hours0, BigDecimal hours1, BigDecimal hours2, BigDecimal hours3, BigDecimal hours4, BigDecimal hours5, BigDecimal hours6) {
+        DateTime weekCommencingDate = formatter.parseDateTime(weekCommencingString);
+        Employee employee = employeeRepository.findById(employeeId);
+        for (TimeSheetEntry entry : timeSheetEntryRepository.findByEmployeeAndDateBetween(employee, weekCommencingDate, weekCommencingDate.plusWeeks(0))) {
+            timeSheetEntryRepository.delete(entry);
+        }
+        timeSheetEntryRepository.save(new TimeSheetEntry(null, weekCommencingDate, hours0, employee));
+        timeSheetEntryRepository.save(new TimeSheetEntry(null, weekCommencingDate.plusDays(1), hours1, employee));
+        timeSheetEntryRepository.save(new TimeSheetEntry(null, weekCommencingDate.plusDays(2), hours2, employee));
+        timeSheetEntryRepository.save(new TimeSheetEntry(null, weekCommencingDate.plusDays(3), hours3, employee));
+        timeSheetEntryRepository.save(new TimeSheetEntry(null, weekCommencingDate.plusDays(4), hours4, employee));
+        timeSheetEntryRepository.save(new TimeSheetEntry(null, weekCommencingDate.plusDays(5), hours5, employee));
+        timeSheetEntryRepository.save(new TimeSheetEntry(null, weekCommencingDate.plusDays(6), hours6, employee));
     }
 }

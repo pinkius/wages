@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 
 /**
  * Created by: Matthew Smalley
@@ -41,4 +42,9 @@ public class TimeSheetController {
         return mav;
     }
 
+    @RequestMapping(value = "/saveTimeSheet")
+    public String saveTimeSheet(Long employeeId, String weekCommencing, BigDecimal hours0, BigDecimal hours1, BigDecimal hours2, BigDecimal hours3, BigDecimal hours4, BigDecimal hours5, BigDecimal hours6) {
+        timeSheetEntryService.saveTimeSheet(employeeId, weekCommencing, hours0, hours1, hours2, hours3, hours4, hours5, hours6);
+        return "redirect:timeSheet.html?employeeId=" + employeeId;
+    }
 }

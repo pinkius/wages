@@ -40,4 +40,7 @@ public interface TimeSheetEntryRepository extends CrudRepository<TimeSheetEntry,
     TimeSheetEntry findById(Long id);
 
     List<TimeSheetEntry> findByEmployeeAndDateBetween(Employee employee, DateTime startDate, DateTime endDate);
+
+    @Transactional(readOnly = false)
+    void delete(TimeSheetEntry entry);
 }
