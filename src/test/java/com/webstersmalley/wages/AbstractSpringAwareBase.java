@@ -20,12 +20,12 @@ import com.webstersmalley.wages.repository.EmployeeRepository;
 import com.webstersmalley.wages.repository.TimeSheetEntryTypeRepository;
 import com.webstersmalley.wages.service.EmployeeService;
 import com.webstersmalley.wages.service.FakeDataService;
-import com.webstersmalley.wages.service.TimeSheetEntryService;
 import com.webstersmalley.wages.service.TimeSheetEntryTypeService;
+import com.webstersmalley.wages.service.WeekTimeSheetService;
 import com.webstersmalley.wages.web.EmployeeController;
 import com.webstersmalley.wages.web.MainController;
-import com.webstersmalley.wages.web.TimeSheetController;
 import com.webstersmalley.wages.web.TimeSheetEntryTypesController;
+import com.webstersmalley.wages.web.WeekTimeSheetController;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.springframework.test.context.ContextConfiguration;
@@ -60,7 +60,7 @@ public class AbstractSpringAwareBase extends AbstractJUnit4SpringContextTests {
     protected FakeDataService fakeDataService;
 
     @Resource
-    protected TimeSheetEntryService timeSheetEntryService;
+    protected WeekTimeSheetService weekTimeSheetService;
 
     @Resource
     protected TimeSheetEntryTypeService timeSheetEntryTypeService;
@@ -72,7 +72,7 @@ public class AbstractSpringAwareBase extends AbstractJUnit4SpringContextTests {
     protected EmployeeController employeeController;
 
     @Resource
-    protected TimeSheetController timeSheetController;
+    protected WeekTimeSheetController weekTimeSheetController;
 
     @Resource
     protected TimeSheetEntryTypesController timeSheetEntryTypesController;

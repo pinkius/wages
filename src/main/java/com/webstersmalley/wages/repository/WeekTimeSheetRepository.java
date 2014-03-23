@@ -17,7 +17,7 @@
 package com.webstersmalley.wages.repository;
 
 import com.webstersmalley.wages.domain.Employee;
-import com.webstersmalley.wages.domain.TimeSheetEntry;
+import com.webstersmalley.wages.domain.WeekTimeSheet;
 import org.joda.time.DateTime;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,18 +29,17 @@ import java.util.List;
  * Date: 06/03/14
  */
 @Transactional(readOnly = true)
-public interface TimeSheetEntryRepository extends CrudRepository<TimeSheetEntry, Long> {
-    List<TimeSheetEntry> findAll();
+public interface WeekTimeSheetRepository extends CrudRepository<WeekTimeSheet, Long> {
 
-    List<TimeSheetEntry> findAllByEmployeeId(Long employeeId);
-
-    @Transactional(readOnly = false)
-    TimeSheetEntry save(TimeSheetEntry timeSheetEntry);
-
-    TimeSheetEntry findById(Long id);
-
-    List<TimeSheetEntry> findByEmployeeAndDateBetween(Employee employee, DateTime startDate, DateTime endDate);
+    List<WeekTimeSheet> findAll();
 
     @Transactional(readOnly = false)
-    void delete(TimeSheetEntry entry);
+    WeekTimeSheet save(WeekTimeSheet weekTimeSheet);
+
+    WeekTimeSheet findById(Long id);
+
+    List<WeekTimeSheet> findByEmployeeAndWeekCommencingBetween(Employee employee, DateTime weekCommencingDateStart, DateTime weekCommencingDateEnd);
+
+    @Transactional(readOnly = false)
+    void delete(WeekTimeSheet weekTimeSheet);
 }

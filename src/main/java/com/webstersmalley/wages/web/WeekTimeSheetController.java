@@ -16,35 +16,42 @@
 
 package com.webstersmalley.wages.web;
 
-import com.webstersmalley.wages.service.TimeSheetEntryService;
+import com.webstersmalley.wages.domain.WeekTimeSheet;
+import com.webstersmalley.wages.service.WeekTimeSheetService;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 
 /**
  * Created by: Matthew Smalley
  * Date: 07/03/14
  */
 @Controller
-public class TimeSheetController {
+public class WeekTimeSheetController {
+    private Logger logger = LoggerFactory.getLogger(getClass());
     @Resource
-    private TimeSheetEntryService timeSheetEntryService;
+    private WeekTimeSheetService weekTimeSheetService;
 
     @RequestMapping(value = "/timeSheet")
     public ModelAndView timeSheet(@RequestParam Long employeeId, @RequestParam(required = false) DateTime start, @RequestParam(required = false) DateTime end) {
         ModelAndView mav = new ModelAndView("timeSheet");
-        mav.addObject("timeSheetRows", timeSheetEntryService.getTimeSheetByEmployeeAndDateRange(employeeId, start, end));
+        mav.addObject("weeks", weekTimeSheetService.findByEmployeeAndWeekCommencingBetween(employeeId, start, end));
         return mav;
     }
 
     @RequestMapping(value = "/saveTimeSheet")
-    public String saveTimeSheet(Long employeeId, String weekCommencing, BigDecimal hours0, BigDecimal hours1, BigDecimal hours2, BigDecimal hours3, BigDecimal hours4, BigDecimal hours5, BigDecimal hours6) {
-        timeSheetEntryService.saveTimeSheet(employeeId, weekCommencing, hours0, hours1, hours2, hours3, hours4, hours5, hours6);
-        return "redirect:timeSheet.html?employeeId=" + employeeId;
+    public String saveTimeSheet(@ModelAttribute("command") WeekTimeSheet weekTimeSheet, BindingResult resultLong) {
+        logger.info("Found this: {}", weekTimeSheet);
+
+        weekTimeSheetService.saveTimeSheet(weekTimeSheet);
+        return "redirect:timeSheet.html?employeeId=" + weekTimeSheet.getEmployee().getId();
     }
 }

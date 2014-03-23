@@ -17,8 +17,8 @@
 package com.webstersmalley.wages.service;
 
 import com.webstersmalley.wages.domain.Employee;
-import com.webstersmalley.wages.domain.TimeSheetEntry;
 import com.webstersmalley.wages.domain.TimeSheetEntryType;
+import com.webstersmalley.wages.domain.WeekTimeSheet;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +38,7 @@ public class FakeDataService {
     private TimeSheetEntryTypeService timeSheetEntryTypeService;
 
     @Resource
-    private TimeSheetEntryService timeSheetEntryService;
+    private WeekTimeSheetService weekTimeSheetService;
 
     private static final String[] FIRST_NAMES = {"Madeleine", "Amelia", "Oscar"};
     private static final String[] LAST_NAMES = {"Turnbull", "Gray", "Barlow"};
@@ -71,7 +71,18 @@ public class FakeDataService {
 
         TimeSheetEntryType standard = createTimeSheetEntryType();
         Employee employee1 = createEmployee();
-        timeSheetEntryService.save(new TimeSheetEntry(standard, new DateTime().withTimeAtStartOfDay(), new BigDecimal("7.50"), employee1));
+        WeekTimeSheet week = new WeekTimeSheet();
+        week.setTimeSheetEntryType(standard);
+        week.setEmployee(employee1);
+        week.setWeekCommencing(new DateTime().withTimeAtStartOfDay().withDayOfWeek(1));
+        week.setMondayHours(new BigDecimal("8.0"));
+        week.setTuesdayHours(new BigDecimal("8.0"));
+        week.setWednesdayHours(new BigDecimal("8.0"));
+        week.setThursdayHours(new BigDecimal("8.0"));
+        week.setFridayHours(new BigDecimal("8.0"));
+        week.setSaturdayHours(new BigDecimal("0.0"));
+        week.setSundayHours(new BigDecimal("0.0"));
+        weekTimeSheetService.save(week);
 
         return employee1;
     }

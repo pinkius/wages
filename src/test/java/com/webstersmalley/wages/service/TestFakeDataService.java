@@ -30,12 +30,12 @@ public class TestFakeDataService extends AbstractSpringAwareBase {
 
 
     @Resource
-    private TimeSheetEntryService timeSheetEntryService;
+    private WeekTimeSheetService weekTimeSheetService;
 
     @Test
     public void testFakeDataService() {
-        int i = timeSheetEntryService.findAll().size();
+        int i = weekTimeSheetService.findAll().size();
         fakeDataService.addFakeData();
-        Assert.assertTrue(timeSheetEntryService.findAll().size() > i);
+        Assert.assertTrue(weekTimeSheetService.findAll().size() > i);
     }
 }
