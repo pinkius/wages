@@ -59,6 +59,19 @@ public class WeekTimeSheet {
     private BigDecimal saturdayHours;
     private BigDecimal sundayHours;
 
+    private BigDecimal totalHours;
+
+    public BigDecimal getTotalHours() {
+        if (totalHours == null) {
+            totalHours = mondayHours.add(tuesdayHours).add(wednesdayHours).add(thursdayHours).add(fridayHours).add(saturdayHours).add(sundayHours);
+        }
+        return totalHours;
+    }
+
+    public BigDecimal getTotalGrossWage() {
+        return getTotalHours().multiply(timeSheetEntryType.getHourlyRate()).setScale(getTotalHours().scale());
+    }
+
     public Long getId() {
         return id;
     }
