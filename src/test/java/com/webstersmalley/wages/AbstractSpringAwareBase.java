@@ -20,6 +20,7 @@ import com.webstersmalley.wages.repository.EmployeeRepository;
 import com.webstersmalley.wages.repository.TimeSheetEntryTypeRepository;
 import com.webstersmalley.wages.service.EmployeeService;
 import com.webstersmalley.wages.service.FakeDataService;
+import com.webstersmalley.wages.service.TaxYearSummaryService;
 import com.webstersmalley.wages.service.TimeSheetEntryTypeService;
 import com.webstersmalley.wages.service.WeekTimeSheetService;
 import com.webstersmalley.wages.web.EmployeeController;
@@ -76,6 +77,9 @@ public class AbstractSpringAwareBase extends AbstractJUnit4SpringContextTests {
 
     @Resource
     protected TimeSheetEntryTypesController timeSheetEntryTypesController;
+
+    @Resource
+    protected TaxYearSummaryService taxYearSummaryService;
 
     @BeforeClass
     public static void setup() {

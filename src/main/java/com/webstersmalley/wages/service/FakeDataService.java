@@ -44,9 +44,13 @@ public class FakeDataService {
     private static final String[] LAST_NAMES = {"Turnbull", "Gray", "Barlow"};
     private static final String[] TAX_CODES = {"117L", "028L", "123L"};
     private static final String[] RATE_NAMES = {"Standard Day Rate", "Standard Night Rate", "Special Day Rate", "Overtime", "Weekend", "Holiday"};
-    private static final String[] RATES = {"100.00", "75.00", "10.00", "210.00"};
+    private static final String[] RATES = {"10.00", "7.50", "5.00", "6.34"};
 
     private boolean dataAdded = false;
+
+    private BigDecimal getRandomHours() {
+        return new BigDecimal(Math.floor(Math.random() * 8)).setScale(2);
+    }
 
     private String getRandomString(String[] selection) {
         return selection[(int) (Math.random() * selection.length)];
@@ -67,22 +71,31 @@ public class FakeDataService {
         dataAdded = true;
     }
 
+    private WeekTimeSheet createWeekTimeSheet(Employee employee, TimeSheetEntryType timeSheetEntryType, DateTime weekCommencing) {
+        WeekTimeSheet week = new WeekTimeSheet();
+        week.setTimeSheetEntryType(timeSheetEntryType);
+        week.setEmployee(employee);
+        week.setWeekCommencing(weekCommencing);
+        week.setMondayHours(getRandomHours());
+        week.setTuesdayHours(getRandomHours());
+        week.setWednesdayHours(getRandomHours());
+        week.setThursdayHours(getRandomHours());
+        week.setFridayHours(getRandomHours());
+        week.setSaturdayHours(getRandomHours());
+        week.setSundayHours(getRandomHours());
+        return week;
+    }
+
     public Employee createEmployeeAndTimeSheets() {
 
         TimeSheetEntryType standard = createTimeSheetEntryType();
         Employee employee1 = createEmployee();
-        WeekTimeSheet week = new WeekTimeSheet();
-        week.setTimeSheetEntryType(standard);
-        week.setEmployee(employee1);
-        week.setWeekCommencing(new DateTime().withTimeAtStartOfDay().withDayOfWeek(1));
-        week.setMondayHours(new BigDecimal("8.0"));
-        week.setTuesdayHours(new BigDecimal("8.0"));
-        week.setWednesdayHours(new BigDecimal("8.0"));
-        week.setThursdayHours(new BigDecimal("8.0"));
-        week.setFridayHours(new BigDecimal("8.0"));
-        week.setSaturdayHours(new BigDecimal("0.0"));
-        week.setSundayHours(new BigDecimal("0.0"));
-        weekTimeSheetService.save(week);
+
+        DateTime weekCommencing = new DateTime().withTimeAtStartOfDay().withDayOfWeek(1);
+        weekTimeSheetService.save(createWeekTimeSheet(employee1, standard, weekCommencing));
+        weekTimeSheetService.save(createWeekTimeSheet(employee1, standard, weekCommencing.minusWeeks(1)));
+        weekTimeSheetService.save(createWeekTimeSheet(employee1, standard, weekCommencing.minusWeeks(2)));
+        weekTimeSheetService.save(createWeekTimeSheet(employee1, standard, weekCommencing.minusWeeks(3)));
 
         return employee1;
     }

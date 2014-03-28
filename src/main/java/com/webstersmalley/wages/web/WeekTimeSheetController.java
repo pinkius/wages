@@ -71,4 +71,13 @@ public class WeekTimeSheetController {
         weekTimeSheetService.saveTimeSheet(week);
         return "redirect:timeSheet.html?employeeId=" + week.getEmployee().getId();
     }
+
+
+    @RequestMapping(value = "/payTable")
+    public ModelAndView payTable(@RequestParam Long employeeId, @RequestParam(required = false) DateTime start, @RequestParam(required = false) DateTime end) {
+        ModelAndView mav = new ModelAndView("payTable");
+        mav.addObject("weeks", weekTimeSheetService.findByEmployeeAndWeekCommencingBetween(employeeId, start, end));
+        return mav;
+    }
+
 }
