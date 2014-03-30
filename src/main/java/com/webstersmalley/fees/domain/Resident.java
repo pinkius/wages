@@ -34,6 +34,60 @@ public class Resident {
     private Long id;
     private String name;
     private LocalDate dateOfBirth;
+    private boolean active;
+    private LocalDate dateOfArrival;
+    private String contactName;
+    private String contactTelephone;
+    private String niNumber;
+    private String comment;
+
+    public LocalDate getDateOfArrival() {
+        return dateOfArrival;
+    }
+
+    public void setDateOfArrival(LocalDate dateOfArrival) {
+        this.dateOfArrival = dateOfArrival;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getContactTelephone() {
+        return contactTelephone;
+    }
+
+    public void setContactTelephone(String contactTelephone) {
+        this.contactTelephone = contactTelephone;
+    }
+
+    public String getNiNumber() {
+        return niNumber;
+    }
+
+    public void setNiNumber(String niNumber) {
+        this.niNumber = niNumber;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
     public LocalDate getDateOfBirth() {
         return dateOfBirth;

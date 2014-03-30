@@ -12,7 +12,6 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 
-    <!-- link rel="stylesheet" href="css/wages.css" -->
   </head>
   <body>
      <%@ include file="/WEB-INF/jsp/common-navbar.jsp" %>
@@ -22,8 +21,8 @@
 
        <!-- Main component for a primary marketing message or call to action -->
        <div class="jumbotron">
-         <h1>Wages</h1>
-         <p>Welcome to webster-smalley wages.</p>
+         <h1>Fees</h1>
+         <p>Welcome to webster-smalley fees.</p>
        </div>
 
      </div> <!-- /container -->

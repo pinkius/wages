@@ -41,6 +41,7 @@ public class FakeDataService {
         Resident resident = new Resident();
         resident.setName(getRandomString(FIRST_NAMES) + " " + getRandomString(LAST_NAMES));
         resident.setDateOfBirth(new LocalDate().minusDays((int) (Math.random() * 120 * 365)));
+        resident.setActive(true);
         return residentService.save(resident);
     }
     public void createFakeData() {

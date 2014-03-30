@@ -40,4 +40,8 @@ public class ResidentService {
     public Resident findById(Long residentId) {
         return residentRepository.findById(residentId);
     }
+
+    public void delete(Long id) {
+        residentRepository.delete(id);
+    }
 }
