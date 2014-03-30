@@ -14,10 +14,10 @@ package com.webstersmalley.fees.service;/***************************************
  limitations under the License.
  *************************************************************************/
 
+import com.webstersmalley.fees.domain.Charge;
 import com.webstersmalley.fees.domain.Resident;
-import com.webstersmalley.fees.domain.Room;
+import com.webstersmalley.fees.domain.ResidentAccount;
 import com.webstersmalley.fees.domain.RoomBooking;
-import com.webstersmalley.fees.repository.RoomBookingRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -27,19 +27,27 @@ import java.util.List;
  * Created: 30/03/2014
  */
 @Service
-public class RoomBookingService {
-    @Resource
-    private RoomBookingRepository roomBookingRepository;
+public class ResidentAccountService {
+    @Resource private ResidentService residentService;
+    @Resource private RoomBookingService roomBookingService;
+    @Resource private ChargeService chargeService;
 
-    public RoomBooking save(RoomBooking roomBooking) {
-        return roomBookingRepository.save(roomBooking);
-    }
+    public ResidentAccount getAccountForResident(Resident resident) {
+        List<RoomBooking> roomBookings = roomBookingService.findAllByResident(resident);
+        List<Charge> charges = chargeService.findByResident(resident);
 
-    public List<RoomBooking> findAllByRoom(Room room) {
-        return roomBookingRepository.findAllByRoom(room);
-    }
+        for (RoomBooking roomBooking: roomBookings) {
+            Charge charge = new Charge();
+            charge.setName("Room charge");
+            charge.setDate(roomBooking.getDate());
+            charge.setAmount(roomBooking.getFee());
+            charges.add(charge);
+        }
 
-    public List<RoomBooking> findAllByResident(Resident resident) {
-        return roomBookingRepository.findAllByResident(resident);
+        ResidentAccount account = new ResidentAccount();
+        account.setResident(resident);
+        account.setCharges(charges);
+
+        return account;
     }
 }

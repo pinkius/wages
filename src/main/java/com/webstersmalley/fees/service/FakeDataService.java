@@ -14,6 +14,7 @@ package com.webstersmalley.fees.service;/***************************************
  limitations under the License.
  *************************************************************************/
 
+import com.webstersmalley.fees.domain.Charge;
 import com.webstersmalley.fees.domain.Resident;
 import com.webstersmalley.fees.domain.Room;
 import com.webstersmalley.fees.domain.RoomBooking;
@@ -30,6 +31,7 @@ import java.math.BigDecimal;
 public class FakeDataService {
     private static final String[] FIRST_NAMES = {"Madeleine", "Amelia", "Oscar", "Peter", "Libby", "Daisy", "Elsie", "Ruby"};
     private static final String[] LAST_NAMES = {"Turnbull", "Gray", "Barlow", "Adams", "Pope", "Perkins", "Gordon"};
+    private static final String[] CHARGE_TYPES = {"Hairdressing", "Escort", "Chiropadist"};
 
     private boolean createdData = false;
 
@@ -41,6 +43,9 @@ public class FakeDataService {
 
     @Resource
     private RoomBookingService roomBookingService;
+
+    @Resource
+    private ChargeService chargeService;
 
     private String getRandomString(String[] selection) {
             return selection[(int) (Math.random() * selection.length)];
@@ -61,20 +66,26 @@ public class FakeDataService {
         return residentService.save(resident);
     }
     public void createFakeData() {
-        Resident resident = createFakeResident();
-        Room room = createFakeRoom();
-        createFakeRoomBooking(resident, room);
-
+        createFakeResidentWithRoomAndCharges();
     }
 
-    private RoomBooking createFakeRoomBooking(Resident resident, Room room) {
+    public RoomBooking createFakeRoomBooking(Resident resident, Room room, LocalDate date) {
         RoomBooking roomBooking = new RoomBooking();
         roomBooking.setResident(resident);
         roomBooking.setRoom(room);
-        roomBooking.setDate(new LocalDate());
+        roomBooking.setDate(date);
         roomBooking.setFee(new BigDecimal("10.00"));
         return roomBookingService.save(roomBooking);
 
+    }
+
+    public Charge createFakeCharge(Resident resident, LocalDate date) {
+        Charge charge = new Charge();
+        charge.setResident(resident);
+        charge.setDate(date);
+        charge.setAmount(new BigDecimal("20.00"));
+        charge.setName(getRandomString(CHARGE_TYPES));
+        return chargeService.save(charge);
     }
 
     public void addFakeDataOnce() {
@@ -82,5 +93,17 @@ public class FakeDataService {
             createFakeResident();
             createdData = true;
         }
+    }
+
+    public Resident createFakeResidentWithRoomAndCharges() {
+        Room room = createFakeRoom();
+        Resident resident = createFakeResident();
+        for (int i = 0; i < 30; i++) {
+            createFakeRoomBooking(resident, room, new LocalDate().minusDays(i));
+        }
+        for (int i = 0; i < 4; i++) {
+            createFakeCharge(resident, new LocalDate().minusWeeks(i));
+        }
+        return resident;
     }
 }

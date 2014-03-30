@@ -14,9 +14,8 @@ package com.webstersmalley.fees.repository;/************************************
  limitations under the License.
  *************************************************************************/
 
+import com.webstersmalley.fees.domain.Charge;
 import com.webstersmalley.fees.domain.Resident;
-import com.webstersmalley.fees.domain.Room;
-import com.webstersmalley.fees.domain.RoomBooking;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,17 +25,7 @@ import java.util.List;
  * Created: 30/03/2014
  */
 @Transactional(readOnly = true)
-public interface RoomBookingRepository extends CrudRepository<RoomBooking, Long> {
-    List<RoomBooking> findAll();
+public interface ChargeRepository extends CrudRepository<Charge, Long>  {
+    List<Charge> findByResident(Resident resident);
 
-    @Transactional(readOnly = false)
-    RoomBooking save(RoomBooking roomBooking);
-
-    RoomBooking findById(Long id);
-
-    @Transactional(readOnly = false)
-    void delete(RoomBooking employee);
-
-    List<RoomBooking> findAllByRoom(Room room);
-    List<RoomBooking> findAllByResident(Resident resident);
 }

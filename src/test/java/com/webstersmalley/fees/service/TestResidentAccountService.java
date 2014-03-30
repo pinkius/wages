@@ -14,32 +14,21 @@ package com.webstersmalley.fees.service;/***************************************
  limitations under the License.
  *************************************************************************/
 
+import com.webstersmalley.fees.AbstractSpringAwareBase;
 import com.webstersmalley.fees.domain.Resident;
-import com.webstersmalley.fees.domain.Room;
-import com.webstersmalley.fees.domain.RoomBooking;
-import com.webstersmalley.fees.repository.RoomBookingRepository;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-import java.util.List;
+import com.webstersmalley.fees.domain.ResidentAccount;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Created: 30/03/2014
  */
-@Service
-public class RoomBookingService {
-    @Resource
-    private RoomBookingRepository roomBookingRepository;
+public class TestResidentAccountService extends AbstractSpringAwareBase {
+    @Test
+    public void testGetResidentAccount() {
+        Resident resident = fakeDataService.createFakeResidentWithRoomAndCharges();
 
-    public RoomBooking save(RoomBooking roomBooking) {
-        return roomBookingRepository.save(roomBooking);
-    }
-
-    public List<RoomBooking> findAllByRoom(Room room) {
-        return roomBookingRepository.findAllByRoom(room);
-    }
-
-    public List<RoomBooking> findAllByResident(Resident resident) {
-        return roomBookingRepository.findAllByResident(resident);
+        ResidentAccount account = residentAccountService.getAccountForResident(resident);
+        Assert.assertTrue(account.getCharges().size() > 1);
     }
 }

@@ -14,10 +14,9 @@ package com.webstersmalley.fees.service;/***************************************
  limitations under the License.
  *************************************************************************/
 
+import com.webstersmalley.fees.domain.Charge;
 import com.webstersmalley.fees.domain.Resident;
-import com.webstersmalley.fees.domain.Room;
-import com.webstersmalley.fees.domain.RoomBooking;
-import com.webstersmalley.fees.repository.RoomBookingRepository;
+import com.webstersmalley.fees.repository.ChargeRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -27,19 +26,15 @@ import java.util.List;
  * Created: 30/03/2014
  */
 @Service
-public class RoomBookingService {
+public class ChargeService {
     @Resource
-    private RoomBookingRepository roomBookingRepository;
+    private ChargeRepository chargeRepository;
 
-    public RoomBooking save(RoomBooking roomBooking) {
-        return roomBookingRepository.save(roomBooking);
+    public Charge save(Charge charge) {
+        return chargeRepository.save(charge);
     }
 
-    public List<RoomBooking> findAllByRoom(Room room) {
-        return roomBookingRepository.findAllByRoom(room);
-    }
-
-    public List<RoomBooking> findAllByResident(Resident resident) {
-        return roomBookingRepository.findAllByResident(resident);
+    public List<Charge> findByResident(Resident resident) {
+        return chargeRepository.findByResident(resident);
     }
 }

@@ -18,6 +18,7 @@ package com.webstersmalley.fees;
 
 import com.webstersmalley.fees.repository.ResidentRepository;
 import com.webstersmalley.fees.service.FakeDataService;
+import com.webstersmalley.fees.service.ResidentAccountService;
 import com.webstersmalley.fees.service.ResidentService;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -45,6 +46,9 @@ public class AbstractSpringAwareBase extends AbstractJUnit4SpringContextTests {
 
     @Resource
     protected ResidentService residentService;
+
+    @Resource
+    protected ResidentAccountService residentAccountService;
 
     @Resource
     protected FakeDataService fakeDataService;
