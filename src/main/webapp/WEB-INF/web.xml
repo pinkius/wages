@@ -20,14 +20,14 @@
          xmlns="http://java.sun.com/xml/ns/javaee"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          id="WebApp_ID" version="2.5">
-    <display-name>Webster Smalley Wages</display-name>
+    <display-name>Webster Smalley Fees</display-name>
     <servlet>
-        <servlet-name>wages</servlet-name>
+        <servlet-name>fees</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>wages</servlet-name>
+        <servlet-name>fees</servlet-name>
         <url-pattern>*.html</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
