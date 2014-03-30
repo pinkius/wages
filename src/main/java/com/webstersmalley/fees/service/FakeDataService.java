@@ -15,10 +15,13 @@ package com.webstersmalley.fees.service;/***************************************
  *************************************************************************/
 
 import com.webstersmalley.fees.domain.Resident;
+import com.webstersmalley.fees.domain.Room;
+import com.webstersmalley.fees.domain.RoomBooking;
 import org.joda.time.LocalDate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 
 /**
  * Created: 30/03/2014
@@ -33,9 +36,22 @@ public class FakeDataService {
     @Resource
     private ResidentService residentService;
 
+    @Resource
+    private RoomService roomService;
+
+    @Resource
+    private RoomBookingService roomBookingService;
+
     private String getRandomString(String[] selection) {
             return selection[(int) (Math.random() * selection.length)];
         }
+
+    public Room createFakeRoom() {
+        Room room = new Room();
+        room.setNumber(new Integer((int)(Math.random() * 1000)).toString());
+        roomService.save(room);
+        return room;
+    }
 
     public Resident createFakeResident() {
         Resident resident = new Resident();
@@ -45,7 +61,19 @@ public class FakeDataService {
         return residentService.save(resident);
     }
     public void createFakeData() {
-        createFakeResident();
+        Resident resident = createFakeResident();
+        Room room = createFakeRoom();
+        createFakeRoomBooking(resident, room);
+
+    }
+
+    private RoomBooking createFakeRoomBooking(Resident resident, Room room) {
+        RoomBooking roomBooking = new RoomBooking();
+        roomBooking.setResident(resident);
+        roomBooking.setRoom(room);
+        roomBooking.setDate(new LocalDate());
+        roomBooking.setFee(new BigDecimal("10.00"));
+        return roomBookingService.save(roomBooking);
 
     }
 

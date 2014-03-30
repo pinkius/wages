@@ -14,7 +14,10 @@ package com.webstersmalley.fees.domain;/****************************************
  limitations under the License.
  *************************************************************************/
 
+import org.joda.time.LocalDate;
+
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 /**
  * Created: 30/03/2014
@@ -30,6 +33,10 @@ public class RoomBooking {
 
     @ManyToOne
     private Room room;
+
+    private LocalDate date;
+
+    private BigDecimal fee;
 
     public Long getId() {
         return id;
@@ -53,5 +60,21 @@ public class RoomBooking {
 
     public void setRoom(Room room) {
         this.room = room;
+    }
+
+    public BigDecimal getFee() {
+        return fee;
+    }
+
+    public void setFee(BigDecimal fee) {
+        this.fee = fee;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }
