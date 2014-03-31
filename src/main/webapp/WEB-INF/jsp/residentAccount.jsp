@@ -27,13 +27,23 @@
     <tr>
         <th>Date</th>
         <th>Name</th>
-        <th>Amount</th>
+        <th>Debit</th>
+        <th>Credit</th>
     </tr>
 <c:forEach items="${account.transactions}" var="transaction" varStatus="count">
     <tr id="displayRow${count.index}">
         <td><joda:format value="${transaction.date}" pattern="dd/MM/yyyy" /></td>
         <td>${transaction.name}</td>
-        <td>${transaction.amount}</td>
+        <c:choose>
+            <c:when test="${transaction.transactionType == 'CHARGE'}">
+                <td>${transaction.amount}</td>
+                <td>&nbsp;</td>
+            </c:when>
+            <c:otherwise>
+                <td>&nbsp;</td>
+                <td>${transaction.amount}</td>
+            </c:otherwise>
+        </c:choose>
     </tr>
 </c:forEach>
 </table>

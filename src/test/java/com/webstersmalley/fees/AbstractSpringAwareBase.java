@@ -61,7 +61,7 @@ public class AbstractSpringAwareBase extends AbstractJUnit4SpringContextTests {
 
     @Before
     public void setupData() {
-        fakeDataService.addFakeDataOnce();
+        fakeDataService.createFakeDataOnce();
     }
 
 }
