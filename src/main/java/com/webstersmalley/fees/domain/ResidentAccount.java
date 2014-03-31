@@ -25,8 +25,7 @@ import java.util.List;
  */
 public class ResidentAccount {
     private Resident resident;
-    private List<Charge> charges;
-    //private List<Payments> payments;
+    private List<Transaction> transactions;
     private BigDecimal balance;
 
     public Resident getResident() {
@@ -37,22 +36,26 @@ public class ResidentAccount {
         this.resident = resident;
     }
 
-    public List<Charge> getCharges() {
-        return charges;
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
-    public void setCharges(List<Charge> charges) {
-        this.charges = new ArrayList<Charge>();
-        this.charges.addAll(charges);
-        Collections.sort(this.charges, new Comparator<Charge>() {
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = new ArrayList<Transaction>();
+        this.transactions.addAll(transactions);
+        Collections.sort(this.transactions, new Comparator<Transaction>() {
             @Override
-            public int compare(Charge o1, Charge o2) {
+            public int compare(Transaction o1, Transaction o2) {
                 return o1.getDate().compareTo(o2.getDate());
             }
         });
         BigDecimal current = BigDecimal.ZERO;
-        for (Charge charge: this.charges) {
-            current = current.subtract(charge.getAmount());
+        for (Transaction transaction: this.transactions) {
+            if (Transaction.TransactionType.PAYMENT == transaction.getTransactionType()) {
+                current = current.add(transaction.getAmount());
+            } else {
+                current = current.subtract(transaction.getAmount());
+            }
         }
         this.balance = current;
     }

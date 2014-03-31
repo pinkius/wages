@@ -29,11 +29,11 @@
         <th>Name</th>
         <th>Amount</th>
     </tr>
-<c:forEach items="${account.charges}" var="charge" varStatus="count">
+<c:forEach items="${account.transactions}" var="transaction" varStatus="count">
     <tr id="displayRow${count.index}">
-        <td><joda:format value="${charge.date}" pattern="dd/MM/yyyy" /></td>
-        <td>${charge.name}</td>
-        <td>${charge.amount}</td>
+        <td><joda:format value="${transaction.date}" pattern="dd/MM/yyyy" /></td>
+        <td>${transaction.name}</td>
+        <td>${transaction.amount}</td>
     </tr>
 </c:forEach>
 </table>

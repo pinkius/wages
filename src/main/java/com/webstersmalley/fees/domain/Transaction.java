@@ -20,23 +20,22 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 /**
- * Created: 30/03/2014
+ * Created: 31/03/2014
  */
 @Entity
-public class RoomBooking {
+public class Transaction {
+    public enum TransactionType {
+        CHARGE, PAYMENT
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     @ManyToOne
     private Resident resident;
-
-    @ManyToOne
-    private Room room;
-
+    private String name;
     private LocalDate date;
-
-    private BigDecimal roomRate;
+    private BigDecimal amount;
+    private TransactionType transactionType;
 
     public Long getId() {
         return id;
@@ -54,20 +53,12 @@ public class RoomBooking {
         this.resident = resident;
     }
 
-    public Room getRoom() {
-        return room;
+    public String getName() {
+        return name;
     }
 
-    public void setRoom(Room room) {
-        this.room = room;
-    }
-
-    public BigDecimal getRoomRate() {
-        return roomRate;
-    }
-
-    public void setRoomRate(BigDecimal roomRate) {
-        this.roomRate = roomRate;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public LocalDate getDate() {
@@ -77,4 +68,21 @@ public class RoomBooking {
     public void setDate(LocalDate date) {
         this.date = date;
     }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public TransactionType getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(TransactionType transactionType) {
+        this.transactionType = transactionType;
+    }
+
 }

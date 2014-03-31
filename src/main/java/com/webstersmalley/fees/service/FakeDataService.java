@@ -14,10 +14,10 @@ package com.webstersmalley.fees.service;/***************************************
  limitations under the License.
  *************************************************************************/
 
-import com.webstersmalley.fees.domain.Charge;
 import com.webstersmalley.fees.domain.Resident;
 import com.webstersmalley.fees.domain.Room;
 import com.webstersmalley.fees.domain.RoomBooking;
+import com.webstersmalley.fees.domain.Transaction;
 import org.joda.time.LocalDate;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +45,7 @@ public class FakeDataService {
     private RoomBookingService roomBookingService;
 
     @Resource
-    private ChargeService chargeService;
+    private TransactionService transactionService;
 
     private String getRandomString(String[] selection) {
             return selection[(int) (Math.random() * selection.length)];
@@ -74,18 +74,26 @@ public class FakeDataService {
         roomBooking.setResident(resident);
         roomBooking.setRoom(room);
         roomBooking.setDate(date);
-        roomBooking.setFee(new BigDecimal("10.00"));
+        roomBooking.setRoomRate(new BigDecimal("10.00"));
         return roomBookingService.save(roomBooking);
 
     }
 
-    public Charge createFakeCharge(Resident resident, LocalDate date) {
-        Charge charge = new Charge();
-        charge.setResident(resident);
-        charge.setDate(date);
-        charge.setAmount(new BigDecimal("20.00"));
-        charge.setName(getRandomString(CHARGE_TYPES));
-        return chargeService.save(charge);
+    public Transaction createFakeTransaction(Resident resident, LocalDate date, Transaction.TransactionType transactionType) {
+        Transaction transaction = new Transaction();
+        transaction.setResident(resident);
+        transaction.setDate(date);
+        if (Transaction.TransactionType.CHARGE == transactionType) {
+            transaction.setAmount(new BigDecimal((int)(Math.random()*50)).multiply(new BigDecimal("-1.00")));
+            transaction.setName(getRandomString(CHARGE_TYPES));
+        }
+        if (Transaction.TransactionType.PAYMENT == transactionType) {
+            transaction.setAmount(new BigDecimal((int)(Math.random()*150)).multiply(new BigDecimal("1.00")));
+            transaction.setName("Payment");
+        }
+
+        transaction.setTransactionType(transactionType);
+        return transactionService.save(transaction);
     }
 
     public void addFakeDataOnce() {
@@ -102,7 +110,8 @@ public class FakeDataService {
             createFakeRoomBooking(resident, room, new LocalDate().minusDays(i));
         }
         for (int i = 0; i < 4; i++) {
-            createFakeCharge(resident, new LocalDate().minusWeeks(i));
+            createFakeTransaction(resident, new LocalDate().minusWeeks(i), Transaction.TransactionType.CHARGE);
+            createFakeTransaction(resident, new LocalDate().minusWeeks(i), Transaction.TransactionType.PAYMENT);
         }
         return resident;
     }

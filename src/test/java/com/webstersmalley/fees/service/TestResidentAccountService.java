@@ -29,6 +29,6 @@ public class TestResidentAccountService extends AbstractSpringAwareBase {
         Resident resident = fakeDataService.createFakeResidentWithRoomAndCharges();
 
         ResidentAccount account = residentAccountService.getAccountForResident(resident);
-        Assert.assertTrue(account.getCharges().size() > 1);
+        Assert.assertTrue(account.getTransactions().size() > 1);
     }
 }

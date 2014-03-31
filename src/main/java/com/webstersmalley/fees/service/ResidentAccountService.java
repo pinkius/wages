@@ -14,13 +14,14 @@ package com.webstersmalley.fees.service;/***************************************
  limitations under the License.
  *************************************************************************/
 
-import com.webstersmalley.fees.domain.Charge;
 import com.webstersmalley.fees.domain.Resident;
 import com.webstersmalley.fees.domain.ResidentAccount;
 import com.webstersmalley.fees.domain.RoomBooking;
+import com.webstersmalley.fees.domain.Transaction;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -30,23 +31,24 @@ import java.util.List;
 public class ResidentAccountService {
     @Resource private ResidentService residentService;
     @Resource private RoomBookingService roomBookingService;
-    @Resource private ChargeService chargeService;
+    @Resource private TransactionService transactionService;
 
     public ResidentAccount getAccountForResident(Resident resident) {
         List<RoomBooking> roomBookings = roomBookingService.findAllByResident(resident);
-        List<Charge> charges = chargeService.findByResident(resident);
+        List<Transaction> transactions = transactionService.findByResident(resident);
 
         for (RoomBooking roomBooking: roomBookings) {
-            Charge charge = new Charge();
-            charge.setName("Room charge");
-            charge.setDate(roomBooking.getDate());
-            charge.setAmount(roomBooking.getFee());
-            charges.add(charge);
+            Transaction transaction = new Transaction();
+            transaction.setName("Room charge");
+            transaction.setDate(roomBooking.getDate());
+            transaction.setAmount(roomBooking.getRoomRate().multiply(new BigDecimal("-1")));
+            transaction.setTransactionType(Transaction.TransactionType.CHARGE);
+            transactions.add(transaction);
         }
 
         ResidentAccount account = new ResidentAccount();
         account.setResident(resident);
-        account.setCharges(charges);
+        account.setTransactions(transactions);
 
         return account;
     }

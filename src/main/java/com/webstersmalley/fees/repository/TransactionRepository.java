@@ -14,8 +14,8 @@ package com.webstersmalley.fees.repository;/************************************
  limitations under the License.
  *************************************************************************/
 
-import com.webstersmalley.fees.domain.Charge;
 import com.webstersmalley.fees.domain.Resident;
+import com.webstersmalley.fees.domain.Transaction;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +25,7 @@ import java.util.List;
  * Created: 30/03/2014
  */
 @Transactional(readOnly = true)
-public interface ChargeRepository extends CrudRepository<Charge, Long>  {
-    List<Charge> findByResident(Resident resident);
+public interface TransactionRepository extends CrudRepository<Transaction, Long>  {
+    List<Transaction> findByResident(Resident resident);
 
 }

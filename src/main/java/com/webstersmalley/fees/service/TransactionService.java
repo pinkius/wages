@@ -14,9 +14,9 @@ package com.webstersmalley.fees.service;/***************************************
  limitations under the License.
  *************************************************************************/
 
-import com.webstersmalley.fees.domain.Charge;
 import com.webstersmalley.fees.domain.Resident;
-import com.webstersmalley.fees.repository.ChargeRepository;
+import com.webstersmalley.fees.domain.Transaction;
+import com.webstersmalley.fees.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -26,15 +26,15 @@ import java.util.List;
  * Created: 30/03/2014
  */
 @Service
-public class ChargeService {
+public class TransactionService {
     @Resource
-    private ChargeRepository chargeRepository;
+    private TransactionRepository transactionRepository;
 
-    public Charge save(Charge charge) {
-        return chargeRepository.save(charge);
+    public Transaction save(Transaction transaction) {
+        return transactionRepository.save(transaction);
     }
 
-    public List<Charge> findByResident(Resident resident) {
-        return chargeRepository.findByResident(resident);
+    public List<Transaction> findByResident(Resident resident) {
+        return transactionRepository.findByResident(resident);
     }
 }

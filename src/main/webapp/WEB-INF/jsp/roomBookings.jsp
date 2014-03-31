@@ -30,7 +30,7 @@
         <th>Room Number</th>
         <th>Date</th>
         <th>Resident</th>
-        <th>Fee</th>
+        <th>Room Rate</th>
         <th><input class="btn btn-default" type="button" value="Add..." onClick="javascript:addRow();"></th>
     </tr>
         <tr id="addRow" style="display: none;">
@@ -50,7 +50,7 @@
         <td>${roomBooking.room.number}</td>
         <td><joda:format value="${roomBooking.date}" pattern="dd/MM/yyyy" /></td>
         <td>${roomBooking.resident.name}</td>
-        <td>${roomBooking.fee}</td>
+        <td>${roomBooking.roomRate}</td>
         <td>
             <input class="btn btn-default" type="button" value="Edit..." onClick="javascript:editRow(${count.index});">
         </td>
