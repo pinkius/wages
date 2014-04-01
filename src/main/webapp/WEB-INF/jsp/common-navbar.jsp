@@ -19,6 +19,7 @@
                <ul class="dropdown-menu">
                  <li class="dropdown-header">Data</li>
                  <li><a href="addFakeData.html">Add Fake Data</a></li>
+                 <li><a href="residentAccountSummary.html">Accounts</a></li>
                  <li><a href="residents.html">Residents</a></li>
                  <li><a href="rooms.html">Rooms</a></li>
                  <li class="divider"></li>

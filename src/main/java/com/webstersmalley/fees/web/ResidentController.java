@@ -1,20 +1,20 @@
-package com.webstersmalley.fees.web;/*************************************************************************
- Copyright 2011 Webstersmalley
+/*
+ * Copyright 2014 Webster Smalley
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
- *************************************************************************/
-
-import com.webstersmalley.fees.domain.Resident;
+package com.webstersmalley.fees.web;import com.webstersmalley.fees.domain.Resident;
 import com.webstersmalley.fees.service.ResidentService;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -38,38 +38,30 @@ public class ResidentController {
     private Logger logger = LoggerFactory.getLogger(getClass());
     @Resource
     private ResidentService residentService;
+
     @RequestMapping(value = "/residents")
-     public ModelAndView employeesPage() {
-         ModelAndView mav = new ModelAndView("residents");
-         List<Resident> residents = residentService.findAll();
-         logger.info("Returning: {} residents", residents.size());
-         mav.addObject("residents", residents);
-         return mav;
-     }
+    public ModelAndView employeesPage() {
+        ModelAndView mav = new ModelAndView("residents");
+        List<Resident> residents = residentService.findAll();
+        logger.info("Returning: {} residents", residents.size());
+        mav.addObject("residents", residents);
+        return mav;
+    }
 
 
+    @RequestMapping(value = "/saveResident")
+    public String saveEmployee(@RequestParam Long id, @RequestParam String name, @RequestParam String dateOfBirth, @RequestParam boolean active, @RequestParam String dateOfArrival, @RequestParam String contactName, @RequestParam String contactTelephone, @RequestParam String niNumber, @RequestParam String comment) {
+        Resident resident = new Resident(name, formatter.parseLocalDate(dateOfBirth), active, formatter.parseLocalDate(dateOfArrival), contactName, contactTelephone, niNumber, comment);
+        resident.setId(id);
 
-     @RequestMapping(value = "/saveResident")
-     public String saveEmployee(@RequestParam Long id, @RequestParam String name, @RequestParam String dateOfBirth, @RequestParam boolean active, @RequestParam String dateOfArrival, @RequestParam String contactName, @RequestParam String contactTelephone, @RequestParam String niNumber, @RequestParam String comment) {
-         Resident resident = new Resident();
-         resident.setId(id);
-         resident.setName(name);
-         resident.setDateOfBirth(formatter.parseLocalDate(dateOfBirth));
-         resident.setActive(active);
-         resident.setDateOfArrival(formatter.parseLocalDate(dateOfArrival));
-         resident.setContactName(contactName);
-         resident.setContactTelephone(contactTelephone);
-         resident.setNiNumber(niNumber);
-         resident.setComment(comment);
+        logger.info("Saving resident: {}", resident);
+        residentService.save(resident);
+        return "redirect:residents.html";
+    }
 
-         logger.info("Saving resident: {}", resident);
-         residentService.save(resident);
-         return "redirect:residents.html";
-     }
-
-     @RequestMapping(value = "/deleteResident")
-     public String deleteEmployee(@RequestParam Long id) {
-         residentService.delete(id);
-         return "redirect:residents.html";
-     }
+    @RequestMapping(value = "/deleteResident")
+    public String deleteEmployee(@RequestParam Long id) {
+        residentService.delete(id);
+        return "redirect:residents.html";
+    }
 }

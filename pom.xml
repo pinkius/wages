@@ -42,6 +42,7 @@
         <mockito.version>1.9.5</mockito.version>
         <usertype.version>3.1.0.GA</usertype.version>
         <commons-lang.version>3.3.1</commons-lang.version>
+        <loremipsum.version>1.0</loremipsum.version>
 
         <joda-time-hibernate.version>1.3</joda-time-hibernate.version>
         <httpclient.version>4.2.3</httpclient.version>
@@ -171,6 +172,12 @@
             <groupId>joda-time</groupId>
             <artifactId>joda-time-jsptags</artifactId>
             <version>${joda-time-jsptags.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>de.sven-jacobs</groupId>
+            <artifactId>loremipsum</artifactId>
+            <version>${loremipsum.version}</version>
         </dependency>
 
         <!--

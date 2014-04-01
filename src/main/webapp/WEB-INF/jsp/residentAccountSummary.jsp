@@ -34,7 +34,7 @@
         <td>${account.resident.name}</td>
         <td><joda:format value="${account.resident.dateOfArrival}" pattern="dd/MM/yyyy" /></td>
         <td>NOT YET IMPLEMENTED</td>
-        <td><a href="residentAccount.html?residentId=${account.resident.id}">${account.balance}</a></td>
+        <td><a href="residentAccount.html?residentId=${account.resident.id}">&pound; ${account.balance}</a></td>
     </tr>
 </c:forEach>
 </table>

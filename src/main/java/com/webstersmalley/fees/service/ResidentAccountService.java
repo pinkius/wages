@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package com.webstersmalley.fees.service;import com.webstersmalley.fees.domain.Resident;
+package com.webstersmalley.fees.service;
+
+import com.webstersmalley.fees.domain.Resident;
 import com.webstersmalley.fees.domain.ResidentAccount;
 import com.webstersmalley.fees.domain.RoomBooking;
 import com.webstersmalley.fees.domain.Transaction;
@@ -30,20 +32,20 @@ import java.util.List;
  */
 @Service
 public class ResidentAccountService {
-    @Resource private ResidentService residentService;
-    @Resource private RoomBookingService roomBookingService;
-    @Resource private TransactionService transactionService;
+    @Resource
+    private ResidentService residentService;
+    @Resource
+    private RoomBookingService roomBookingService;
+    @Resource
+    private TransactionService transactionService;
 
     public ResidentAccount getAccountForResident(Resident resident) {
         List<RoomBooking> roomBookings = roomBookingService.findAllByResident(resident);
         List<Transaction> transactions = transactionService.findByResident(resident);
 
-        for (RoomBooking roomBooking: roomBookings) {
-            Transaction transaction = new Transaction();
-            transaction.setName("Room charge");
-            transaction.setDate(roomBooking.getDate());
-            transaction.setAmount(roomBooking.getRoomRate().multiply(new BigDecimal("-1")));
-            transaction.setTransactionType(Transaction.TransactionType.CHARGE);
+        for (RoomBooking roomBooking : roomBookings) {
+            BigDecimal amount = roomBooking.getRoomRate().multiply(new BigDecimal("-1"));
+            Transaction transaction = new Transaction(resident, "Room charge", roomBooking.getDate(), amount, Transaction.TransactionType.CHARGE);
             transactions.add(transaction);
         }
 
