@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Resident Account</title>
+    <title>Resident: ${resident.name}</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
@@ -21,32 +21,46 @@
 
      <div class="container">
 
-         <h1>Resident Account: ${account.resident.name}</h1>
-         <h2>Balance: &pound; ${account.balance}</h2>
+         <h1>Resident: ${resident.name}</h1>
+         <h3>Details</h3>
 <table class="table table-hover table-striped">
     <tr>
-        <th>Date</th>
+        <th>id</th>
+        <td>${resident.id}</td>
+    </tr>
+    <tr>
         <th>Name</th>
-        <th>Debit</th>
-        <th>Credit</th>
+        <td>${resident.name}</td>
     </tr>
-<c:forEach items="${account.transactions}" var="transaction" varStatus="count">
-    <tr id="displayRow${count.index}">
-        <td><joda:format value="${transaction.date}" pattern="dd/MM/yyyy" /></td>
-        <td>${transaction.name}</td>
-        <c:choose>
-            <c:when test="${transaction.transactionType == 'CHARGE'}">
-                <td>${transaction.amount}</td>
-                <td>&nbsp;</td>
-            </c:when>
-            <c:otherwise>
-                <td>&nbsp;</td>
-                <td>${transaction.amount}</td>
-            </c:otherwise>
-        </c:choose>
+    <tr>
+        <th>D.O.B.</th>
+        <td><joda:format value="${resident.dateOfBirth}" pattern="dd/MM/yyyy" /></td>
     </tr>
-</c:forEach>
+    <tr>
+        <th>Active</th>
+        <td>${resident.active}</td>
+    </tr>
+    <tr>
+        <th>Date of Arrival</th>
+        <td><joda:format value="${resident.dateOfArrival}" pattern="dd/MM/yyyy" /></td>
+    </tr>
+    <tr>
+        <th>Contact name</th>
+        <td>${resident.contactName}</td>
+    </tr>
+    <tr>
+        <th>Contact telephone</th>
+        <td>${resident.contactTelephone}</td>
+    </tr>
+    <tr>
+        <th>NI Number</th>
+        <td>${resident.niNumber}</td>
+    </tr>
 </table>
+<h3>Comments</h3>
+<p class="bg-info">
+${resident.comment}
+</p>
      </div> <!-- /container -->
 
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

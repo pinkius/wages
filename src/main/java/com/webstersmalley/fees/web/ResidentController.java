@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-package com.webstersmalley.fees.web;import com.webstersmalley.fees.domain.Resident;
+package com.webstersmalley.fees.web;
+
+import com.webstersmalley.fees.domain.Resident;
+import com.webstersmalley.fees.service.PaymentScheduleService;
 import com.webstersmalley.fees.service.ResidentService;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -38,6 +41,8 @@ public class ResidentController {
     private Logger logger = LoggerFactory.getLogger(getClass());
     @Resource
     private ResidentService residentService;
+    @Resource
+    private PaymentScheduleService paymentScheduleService;
 
     @RequestMapping(value = "/residents")
     public ModelAndView employeesPage() {
@@ -57,6 +62,15 @@ public class ResidentController {
         logger.info("Saving resident: {}", resident);
         residentService.save(resident);
         return "redirect:residents.html";
+    }
+
+    @RequestMapping(value = "/resident")
+    public ModelAndView residentDetail(@RequestParam Long residentId) {
+        ModelAndView mav = new ModelAndView("resident");
+        Resident resident = residentService.findById(residentId);
+        mav.addObject("resident", resident);
+        mav.addObject("paymentSchedule", paymentScheduleService.findByResident(resident));
+        return mav;
     }
 
     @RequestMapping(value = "/deleteResident")

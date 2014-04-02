@@ -57,7 +57,7 @@
 <c:forEach items="${residents}" var="resident" varStatus="count">
     <tr id="displayRow${count.index}">
         <td>${resident.id}</td>
-        <td><a href="residentAccount.html?residentId=${resident.id}">${resident.name}</a></td>
+        <td><a href="resident.html?residentId=${resident.id}">${resident.name}</a></td>
         <td><joda:format value="${resident.dateOfBirth}" pattern="dd/MM/yyyy" /></td>
         <td>${resident.active}</td>
         <td><joda:format value="${resident.dateOfArrival}" pattern="dd/MM/yyyy" /></td>

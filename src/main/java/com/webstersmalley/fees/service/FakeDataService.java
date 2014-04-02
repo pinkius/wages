@@ -16,17 +16,23 @@
 
 package com.webstersmalley.fees.service;
 
+import com.webstersmalley.fees.domain.PayerType;
+import com.webstersmalley.fees.domain.PaymentFrequency;
+import com.webstersmalley.fees.domain.PaymentScheduleElement;
 import com.webstersmalley.fees.domain.Resident;
 import com.webstersmalley.fees.domain.ResidentAccount;
 import com.webstersmalley.fees.domain.Room;
 import com.webstersmalley.fees.domain.RoomBooking;
 import com.webstersmalley.fees.domain.Transaction;
+import com.webstersmalley.fees.domain.TransactionType;
 import org.joda.time.LocalDate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static com.webstersmalley.fees.service.DataGenerationService.TODAY;
@@ -92,7 +98,7 @@ public class FakeDataService {
         ResidentAccount account = residentAccountService.getAccountForResident(resident);
         BigDecimal deficit = account.getBalance();
         BigDecimal payment = deficit.multiply(new BigDecimal("-1")).add(new BigDecimal("100.00"));
-        Transaction transaction = new Transaction(resident, "back in black", DataGenerationService.TODAY, payment, Transaction.TransactionType.PAYMENT);
+        Transaction transaction = new Transaction(resident, "back in black", DataGenerationService.TODAY, payment, TransactionType.PAYMENT);
         transactionService.save(transaction);
         return resident;
     }
@@ -109,7 +115,7 @@ public class FakeDataService {
         Room room = createFakeRoom();
         List<RoomBooking> roomBookings = createFakeRoomBookingRange(resident, room, TODAY.minusMonths(3), TODAY.minusMonths(1), new BigDecimal("20.00"));
         BigDecimal amount = residentAccountService.getAccountForResident(resident).getBalance().multiply(new BigDecimal("-1"));
-        Transaction transaction = new Transaction(resident, "Settling up", TODAY.minusMonths(1), amount, Transaction.TransactionType.PAYMENT);
+        Transaction transaction = new Transaction(resident, "Settling up", TODAY.minusMonths(1), amount, TransactionType.PAYMENT);
         transactionService.save(transaction);
         return resident;
     }
@@ -152,10 +158,10 @@ public class FakeDataService {
      * @param transactionType
      * @return
      */
-    private Transaction createFakeTransaction(Resident resident, LocalDate date, Transaction.TransactionType transactionType) {
+    private Transaction createFakeTransaction(Resident resident, LocalDate date, TransactionType transactionType) {
         BigDecimal amount = new BigDecimal((int) (Math.random() * 50));
         String name;
-        if (Transaction.TransactionType.CHARGE == transactionType) {
+        if (TransactionType.CHARGE == transactionType) {
             amount = amount.multiply(new BigDecimal("-1.00"));
             name = dataGenerationService.generateChargeType();
         } else {
@@ -170,17 +176,47 @@ public class FakeDataService {
      * Creates all fake data once (NOT thread-safe).
      * Will create 3 residents:
      * - one inactive resident (their room bookings stop a month ago, and their account is balanced)
-     * - one active resident with a balance in credit
-     * - one active resident with a balance in deficit
+     * - one active resident with a balance in credit and a "simple" resident-only payment schedule
+     * - one active resident with a balance in deficit and a "complex" resident/NoK/SS schedule
      */
     public void createFakeDataOnce() {
         if (!createdData) {
             createInactiveResident();
-            createActiveCreditResident();
-            createActiveDeficitResident();
-            createFakeResidentWithRoomAndCharges();
+            Resident activeCreditResident = createActiveCreditResident();
+            createPaymentSchedule(activeCreditResident, Collections.singletonList(PayerType.RESIDENT), Arrays.asList(PaymentFrequency.values()), new BigDecimal("460"));
+            Resident activeDeficitResident = createActiveDeficitResident();
+            createPaymentSchedule(activeDeficitResident, Arrays.asList(PayerType.values()), Arrays.asList(PaymentFrequency.values()), new BigDecimal("460"));
             createdData = true;
         }
+    }
+
+    /**
+     * Creates a payment schedule made up of the payer types given (in order), with random amounts each, summing to
+     * the total given.
+     * The frequency of each schedule element is chosen randomly from the given frequencies. The start date is a random
+     * date after the resident's arrival and the end date is null.
+     * @param resident
+     * @param payerTypes
+     * @param paymentFrequencies
+     * @param total
+     * @return
+     */
+    private List<PaymentScheduleElement> createPaymentSchedule(Resident resident, List<PayerType> payerTypes, List<PaymentFrequency> paymentFrequencies, BigDecimal total) {
+        List<PaymentScheduleElement> schedule = new ArrayList<>();
+        BigDecimal remainder = total;
+        for (PayerType payerType : payerTypes) {
+            BigDecimal amount = dataGenerationService.generateBigDecimal(remainder);
+            String name;
+            if (PayerType.SOCIAL_SERVICES == payerType) {
+                name = "Social Services";
+            } else {
+                name = dataGenerationService.generateName();
+            }
+
+            //schedule.add(new PaymentScheduleElement(resident, name, payerType, amount, dataGenerationService.generateRandomElementFromList(paymentFrequencies), from, to));
+        }
+
+        return schedule;
     }
 
     /**
@@ -194,9 +230,11 @@ public class FakeDataService {
             createFakeRoomBooking(resident, room, TODAY.minusDays(i), dataGenerationService.generateRoomRate());
         }
         for (int i = 0; i < 4; i++) {
-            createFakeTransaction(resident, TODAY.minusWeeks(i), Transaction.TransactionType.CHARGE);
-            createFakeTransaction(resident, TODAY.minusWeeks(i), Transaction.TransactionType.PAYMENT);
+            createFakeTransaction(resident, TODAY.minusWeeks(i), TransactionType.CHARGE);
+            createFakeTransaction(resident, TODAY.minusWeeks(i), TransactionType.PAYMENT);
         }
         return resident;
     }
+
+
 }

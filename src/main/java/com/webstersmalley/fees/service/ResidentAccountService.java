@@ -20,6 +20,7 @@ import com.webstersmalley.fees.domain.Resident;
 import com.webstersmalley.fees.domain.ResidentAccount;
 import com.webstersmalley.fees.domain.RoomBooking;
 import com.webstersmalley.fees.domain.Transaction;
+import com.webstersmalley.fees.domain.TransactionType;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -45,7 +46,7 @@ public class ResidentAccountService {
 
         for (RoomBooking roomBooking : roomBookings) {
             BigDecimal amount = roomBooking.getRoomRate().multiply(new BigDecimal("-1"));
-            Transaction transaction = new Transaction(resident, "Room charge", roomBooking.getDate(), amount, Transaction.TransactionType.CHARGE);
+            Transaction transaction = new Transaction(resident, "Room charge", roomBooking.getDate(), amount, TransactionType.CHARGE);
             transactions.add(transaction);
         }
 

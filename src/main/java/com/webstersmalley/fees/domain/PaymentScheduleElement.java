@@ -26,21 +26,32 @@ import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 
 /**
- * Created: 31/03/2014
+ * Created by: Matthew Smalley
+ * Date: 01/04/14
  */
 @Entity
-public class Transaction {
-
-
+public class PaymentScheduleElement {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @ManyToOne
     private Resident resident;
     private String name;
-    private LocalDate date;
+    private PayerType payerType;
     private BigDecimal amount;
-    private TransactionType transactionType;
+    private PaymentFrequency paymentFrequency;
+    private LocalDate activeFrom;
+    private LocalDate activeTo;
+
+    public PaymentScheduleElement(Resident resident, String name, PayerType payerType, BigDecimal amount, PaymentFrequency paymentFrequency, LocalDate activeFrom, LocalDate activeTo) {
+        this.resident = resident;
+        this.name = name;
+        this.payerType = payerType;
+        this.amount = amount;
+        this.paymentFrequency = paymentFrequency;
+        this.activeFrom = activeFrom;
+        this.activeTo = activeTo;
+    }
 
     public Long getId() {
         return id;
@@ -48,14 +59,6 @@ public class Transaction {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Resident getResident() {
-        return resident;
-    }
-
-    public void setResident(Resident resident) {
-        this.resident = resident;
     }
 
     public String getName() {
@@ -66,12 +69,12 @@ public class Transaction {
         this.name = name;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public PayerType getPayerType() {
+        return payerType;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setPayerType(PayerType payerType) {
+        this.payerType = payerType;
     }
 
     public BigDecimal getAmount() {
@@ -82,23 +85,35 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public TransactionType getTransactionType() {
-        return transactionType;
+    public PaymentFrequency getPaymentFrequency() {
+        return paymentFrequency;
     }
 
-    public void setTransactionType(TransactionType transactionType) {
-        this.transactionType = transactionType;
+    public void setPaymentFrequency(PaymentFrequency paymentFrequency) {
+        this.paymentFrequency = paymentFrequency;
     }
 
-    private Transaction() {
-
+    public LocalDate getActiveFrom() {
+        return activeFrom;
     }
 
-    public Transaction(Resident resident, String name, LocalDate date, BigDecimal amount, TransactionType transactionType) {
+    public void setActiveFrom(LocalDate activeFrom) {
+        this.activeFrom = activeFrom;
+    }
+
+    public LocalDate getActiveTo() {
+        return activeTo;
+    }
+
+    public void setActiveTo(LocalDate activeTo) {
+        this.activeTo = activeTo;
+    }
+
+    public Resident getResident() {
+        return resident;
+    }
+
+    public void setResident(Resident resident) {
         this.resident = resident;
-        this.name = name;
-        this.date = date;
-        this.amount = amount;
-        this.transactionType = transactionType;
     }
 }

@@ -17,12 +17,18 @@
 package com.webstersmalley.fees.service;
 
 import de.svenjacobs.loremipsum.LoremIpsum;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.joda.time.LocalDate;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -32,78 +38,9 @@ import java.util.Set;
  */
 @Service
 public class DataGenerationService {
-    private static final String[] FIRST_NAMES = {"Abram",
-            "Allena",
-            "Amalia",
-            "Angie",
-            "Arnetta",
-            "Azucena",
-            "Bill",
-            "Billy",
-            "Casimira",
-            "Chong",
-            "Cindi",
-            "Clark",
-            "Claudette",
-            "Cruz",
-            "Daron",
-            "Daysi",
-            "Debera",
-            "Delcie",
-            "Denisha",
-            "Derek",
-            "Dominga",
-            "Elayne",
-            "Elisabeth",
-            "Emely",
-            "Emerald",
-            "Emmaline",
-            "Ernestina",
-            "Fredda",
-            "Genny",
-            "Gianna",
-            "Ginger",
-            "Goldie",
-            "Hien",
-            "Jada",
-            "Janee",
-            "Jarred",
-            "Jerome",
-            "Jessica",
-            "Jina",
-            "Julia",
-            "Latesha",
-            "Liane",
-            "Loreta",
-            "Lynelle",
-            "Mable",
-            "Malcolm",
-            "Malinda",
-            "Merrill",
-            "Min",
-            "Pamala",
-            "Pearle",
-            "Phebe",
-            "Piedad",
-            "Rashad",
-            "Rick",
-            "Ronny",
-            "Rosalinda",
-            "Rossana",
-            "Scarlet",
-            "Shonda",
-            "Sophia",
-            "Spring",
-            "Stacey",
-            "Sydney",
-            "Terese",
-            "Tiesha",
-            "Valarie",
-            "Wes",
-            "Yajaira",
-            "Zada"};
-    private static final String[] LAST_NAMES = {"Agarwal", "Bealer", "Bicknell", "Boulton", "Breault", "Brenes", "Buff", "Caesar", "Capps", "Casperson", "Cossey", "Cranfill", "Curtis", "Darcy", "Drake", "Duran", "Durrance", "Edling", "Efird", "Esslinger", "Fleet", "Gilbreath", "Goldston", "Hallock", "Harford", "Hendrie", "Hillyer", "Hinderliter", "Hodgson", "Holderman", "Hopp", "Horsman", "Jerabek", "Knoblock", "Lamontagne", "Lebaron", "Madry", "Marquart", "Marshburn", "Mauger", "Mccallister", "Moffatt", "Morejon", "Murdock", "Nakasone", "Novick", "Oesterling", "Peachey", "Pike", "Pineau", "Polson", "Ricardo", "Ruffino", "Saliba", "Schwing", "Sides", "Sidle", "Simoneau", "Squier", "Streeter", "Tores", "Usher", "Vidales", "Walczak", "Weisser", "Wilker", "Wimbish", "Wingate", "Woodson", "You"};
-    private static final String[] CHARGE_TYPES = {"Hairdressing", "Escort", "Chiropodist"};
+    private static final List<String> FIRST_NAMES = new ArrayList<>();
+    private static final List<String> LAST_NAMES = new ArrayList<>();
+    private static final List<String> CHARGE_TYPES = new ArrayList<>();
     public static final LocalDate TODAY = new LocalDate();
 
     private Set<String> usedNames = new HashSet<>();
@@ -112,6 +49,25 @@ public class DataGenerationService {
     private LoremIpsum loremIpsum = new LoremIpsum();
     private int commentCounter = 0;
 
+    private static void loadEntries(String resource, List<String> list) throws IOException {
+        InputStream is = null;
+        try {
+            is = DataGenerationService.class.getResourceAsStream(resource);
+            list.addAll(IOUtils.readLines(is));
+        } finally {
+            IOUtils.closeQuietly(is);
+        }
+    }
+
+    static {
+        try {
+            loadEntries("/firstnames.txt", FIRST_NAMES);
+            loadEntries("/lastnames.txt", LAST_NAMES);
+            loadEntries("/chargetypes.txt", CHARGE_TYPES);
+        } catch (IOException e) {
+            throw new RuntimeException("Error loading sample data", e);
+        }
+    }
 
     /**
      * Creates a random telephone number
@@ -142,7 +98,7 @@ public class DataGenerationService {
      */
     public String generateName() {
         for (int i = 0; i < 100; i++) {
-            String name = getRandomString(FIRST_NAMES) + " " + getRandomString(LAST_NAMES);
+            String name = generateRandomElementFromList(FIRST_NAMES) + " " + generateRandomElementFromList(LAST_NAMES);
             if (!usedNames.contains(name)) {
                 usedNames.add(name);
                 return name;
@@ -172,22 +128,25 @@ public class DataGenerationService {
         return TODAY.minusYears(50).minusDays((int) (Math.random() * 70 * 365));
     }
 
+    public BigDecimal generateBigDecimal(BigDecimal max) {
+        return new BigDecimal(r.nextDouble()).multiply(max).setScale(max.scale(), RoundingMode.HALF_UP);
+    }
+
     public BigDecimal generateRoomRate() {
         return new BigDecimal("20.00");
     }
 
     public String generateChargeType() {
-        return getRandomString(CHARGE_TYPES);
+        return generateRandomElementFromList(CHARGE_TYPES);
     }
-
-    private String getRandomString(String[] selection) {
-        return selection[(int) (Math.random() * selection.length)];
-    }
-
 
     public String generateComment() {
         String returnString = loremIpsum.getWords(50, commentCounter) + ".";
         commentCounter = commentCounter + 5 % 50;
         return returnString;
+    }
+
+    public <T> T generateRandomElementFromList(List<T> list) {
+        return list.get((int) (Math.random() * list.size()));
     }
 }
