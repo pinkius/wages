@@ -16,6 +16,9 @@
 
 package com.webstersmalley.fees.domain;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
 
 import javax.persistence.Entity;
@@ -42,6 +45,48 @@ public class PaymentScheduleElement {
     private PaymentFrequency paymentFrequency;
     private LocalDate activeFrom;
     private LocalDate activeTo;
+
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        PaymentScheduleElement rhs = (PaymentScheduleElement) obj;
+        return new EqualsBuilder()
+                .append(resident, rhs.resident)
+                .append(name, rhs.name)
+                .append(payerType, rhs.payerType)
+                .append(amount, rhs.amount)
+                .append(paymentFrequency, rhs.paymentFrequency)
+                .append(activeFrom, rhs.activeFrom)
+                .append(activeTo, rhs.activeTo)
+                .isEquals();
+    }
+
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(resident)
+                .append(name)
+                .append(payerType)
+                .append(amount)
+                .append(paymentFrequency)
+                .append(activeFrom)
+                .append(activeTo)
+                .toHashCode();
+    }
+
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this).toString();
+    }
+
+    private PaymentScheduleElement() {
+
+    }
 
     public PaymentScheduleElement(Resident resident, String name, PayerType payerType, BigDecimal amount, PaymentFrequency paymentFrequency, LocalDate activeFrom, LocalDate activeTo) {
         this.resident = resident;

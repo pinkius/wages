@@ -63,6 +63,24 @@ public class FakeDataService {
     @Resource
     private ResidentAccountService residentAccountService;
 
+    @Resource
+    private PaymentScheduleService paymentScheduleService;
+
+    private Resident inactiveResident;
+    private Resident activeCreditResident;
+    private Resident activeDeficitResident;
+
+    public Resident getInactiveResident() {
+        return inactiveResident;
+    }
+
+    public Resident getActiveCreditResident() {
+        return activeCreditResident;
+    }
+
+    public Resident getActiveDeficitResident() {
+        return activeDeficitResident;
+    }
 
     /**
      * Creates and saves a room with a random number
@@ -181,10 +199,12 @@ public class FakeDataService {
      */
     public void createFakeDataOnce() {
         if (!createdData) {
-            createInactiveResident();
-            Resident activeCreditResident = createActiveCreditResident();
+            inactiveResident = createInactiveResident();
+
+            activeCreditResident = createActiveCreditResident();
             createPaymentSchedule(activeCreditResident, Collections.singletonList(PayerType.RESIDENT), Arrays.asList(PaymentFrequency.values()), new BigDecimal("460"));
-            Resident activeDeficitResident = createActiveDeficitResident();
+
+            activeDeficitResident = createActiveDeficitResident();
             createPaymentSchedule(activeDeficitResident, Arrays.asList(PayerType.values()), Arrays.asList(PaymentFrequency.values()), new BigDecimal("460"));
             createdData = true;
         }
@@ -213,7 +233,10 @@ public class FakeDataService {
                 name = dataGenerationService.generateName();
             }
 
-            //schedule.add(new PaymentScheduleElement(resident, name, payerType, amount, dataGenerationService.generateRandomElementFromList(paymentFrequencies), from, to));
+            PaymentFrequency freq = dataGenerationService.generateRandomElementFromList(paymentFrequencies);
+            LocalDate from = dataGenerationService.generateDateBetween(resident.getDateOfArrival(), DataGenerationService.TODAY);
+
+            schedule.add(paymentScheduleService.save(new PaymentScheduleElement(resident, name, payerType, amount, freq, from, null)));
         }
 
         return schedule;

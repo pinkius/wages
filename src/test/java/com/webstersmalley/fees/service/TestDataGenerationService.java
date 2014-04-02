@@ -95,4 +95,15 @@ public class TestDataGenerationService {
     public void testGenerateComment() throws Exception {
         testGeneratedString(dataGenerationService.generateComment(), "[A-z ,.]*\\.");
     }
+
+    @Test
+    public void testGenerateDateBetween() {
+        LocalDate from = new LocalDate().minusYears(2);
+        LocalDate to = new LocalDate().plusYears(10);
+        for (int i = 0; i < 1000; i++) {
+            LocalDate between = dataGenerationService.generateDateBetween(from, to);
+            assertTrue(between.compareTo(from) >= 0);
+            assertTrue(between.compareTo(to) <= 0);
+        }
+    }
 }

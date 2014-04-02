@@ -19,6 +19,7 @@ package com.webstersmalley.fees.service;
 import de.svenjacobs.loremipsum.LoremIpsum;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.springframework.stereotype.Service;
 
@@ -148,5 +149,9 @@ public class DataGenerationService {
 
     public <T> T generateRandomElementFromList(List<T> list) {
         return list.get((int) (Math.random() * list.size()));
+    }
+
+    public LocalDate generateDateBetween(LocalDate from, LocalDate to) {
+        return from.plusDays(r.nextInt(Days.daysBetween(from, to).getDays()));
     }
 }

@@ -59,8 +59,22 @@
 </table>
 <h3>Comments</h3>
 <p class="bg-info">
-${resident.comment}
+    ${resident.comment}
 </p>
+<h3>Payment Schedules</h3>
+<table class="table table-hover table-striped">
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Amount</th>
+        <th>Frequency</th>
+        <th>Validity</th>
+    </tr>
+<c:forEach items="${paymentSchedule}" var="element">
+${element.name}
+</c:forEach>
+</table>
+
      </div> <!-- /container -->
 
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
