@@ -71,7 +71,13 @@
         <th>Validity</th>
     </tr>
 <c:forEach items="${paymentSchedule}" var="element">
-${element.name}
+    <tr>
+        <td>${element.name}</td>
+        <td>${element.payerType.description}</td>
+        <td>${element.amount}</td>
+        <td>${element.paymentFrequency.description}</td>
+        <td>${element.validityString}</td>
+    </tr>
 </c:forEach>
 </table>
 

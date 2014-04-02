@@ -21,5 +21,15 @@ package com.webstersmalley.fees.domain;
  * Date: 01/04/14
  */
 public enum PaymentFrequency {
-    MONTHLY, FOUR_WEEKLY
+    MONTHLY("Monthly"), FOUR_WEEKLY("Four-weekly");
+
+    private final String description;
+
+    private PaymentFrequency(final String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }

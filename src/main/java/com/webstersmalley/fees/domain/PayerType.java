@@ -21,5 +21,15 @@ package com.webstersmalley.fees.domain;
  * Date: 01/04/14
  */
 public enum PayerType {
-    RESIDENT, SOCIAL_SERVICES, FAMILY
+    RESIDENT("Resident"), SOCIAL_SERVICES("Social Services"), FAMILY("Family topup");
+
+    private final String description;
+
+    private PayerType(final String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }

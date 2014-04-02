@@ -20,6 +20,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,6 +36,7 @@ import java.math.BigDecimal;
  */
 @Entity
 public class PaymentScheduleElement {
+    private final static DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy");
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -160,5 +163,21 @@ public class PaymentScheduleElement {
 
     public void setResident(Resident resident) {
         this.resident = resident;
+    }
+
+    public String getValidityString() {
+        if (activeFrom == null) {
+            if (activeTo == null) {
+                return "Always";
+            } else {
+                return "Until " + formatter.print(activeTo);
+            }
+        } else {
+            if (activeTo == null) {
+                return "From " + formatter.print(activeFrom);
+            } else {
+                return formatter.print(activeFrom) + " to " + formatter.print(activeTo);
+            }
+        }
     }
 }
