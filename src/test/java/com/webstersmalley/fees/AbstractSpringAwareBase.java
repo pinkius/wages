@@ -17,18 +17,20 @@
 package com.webstersmalley.fees;
 
 import com.webstersmalley.fees.repository.ResidentRepository;
+import com.webstersmalley.fees.repository.RoomRepository;
+import com.webstersmalley.fees.service.DataGenerationService;
 import com.webstersmalley.fees.service.FakeDataService;
 import com.webstersmalley.fees.service.PaymentScheduleService;
 import com.webstersmalley.fees.service.ResidentAccountService;
 import com.webstersmalley.fees.service.ResidentService;
+import com.webstersmalley.fees.service.RoomService;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import javax.annotation.Resource;
-import java.math.BigInteger;
-import java.security.SecureRandom;
 
 /**
  * Created by: Matthew Smalley
@@ -36,11 +38,15 @@ import java.security.SecureRandom;
  */
 @ContextConfiguration("/fees.xml")
 public class AbstractSpringAwareBase extends AbstractJUnit4SpringContextTests {
-    private SecureRandom random = new SecureRandom();
 
-    public String getRandomString(int length) {
-        return new BigInteger(length, random).toString(32);
-    }
+    @Resource
+    protected DataGenerationService dataGenerationService;
+
+    @Resource
+    protected RoomRepository roomRepository;
+
+    @Resource
+    protected RoomService roomService;
 
     @Resource
     protected ResidentRepository residentRepository;
@@ -62,10 +68,14 @@ public class AbstractSpringAwareBase extends AbstractJUnit4SpringContextTests {
         System.setProperty("environment", "dev");
     }
 
-
     @Before
     public void setupData() {
         fakeDataService.createFakeDataOnce();
+    }
+
+    @Test
+    public void testSpringContextLoads() {
+
     }
 
 }

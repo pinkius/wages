@@ -87,9 +87,8 @@ public class FakeDataService {
      *
      * @return
      */
-    private Room createFakeRoom() {
-        Room room = new Room();
-        room.setNumber(dataGenerationService.generateRoomNumber());
+    public Room createFakeRoom() {
+        Room room = new Room(dataGenerationService.generateRoomNumber());
         roomService.save(room);
         return room;
     }
